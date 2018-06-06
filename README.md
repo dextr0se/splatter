@@ -20,5 +20,7 @@ Has been tested on the following browser versions
 Download the javascript and css files.
 If you choose to uncomment the script src and use the internet versions of bootstrap and jquery, it may or may not work
 
-## Screenshots
-![ScreenShot](https://github.com/dextr0se/splatter/raw/master/images/screen1.png "Screen Shot 1")
+## Screenshot 1
+![ScreenShot1](https://github.com/dextr0se/splatter/raw/master/images/screenshot1.png "Screen Shot 1")
+## Screenshot 2
+![ScreenShot2](https://github.com/dextr0se/splatter/raw/master/images/screenshot2.png "Screen Shot 2")
