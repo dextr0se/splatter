@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<root>REFERENCES
+
+	<!-- SUBJECT 1 -->
+    <subject>SUBJECT1
+
+		<!-- SECTION 1 -->
+        <section>SECTION1
+			<content-title>Contents of Subject 1</content-title>
+			<content># This is a comment 
+				command you/would/like/to/run -a
+				another_command you/may/run/someday
+				# Another comment in subject1/content1
+				remember this is xml, &amp; some chars may not work without proper syntax
+				use notepad++, it will help with xml syntax errors
+				so far, the collapse feature has been tested with
+				# CHROME Version 67.0.3396.62 (Official Build) (64-bit)
+				# FIREFOX 60.0.1 (64-bit)
+				# INTERNET EXPLORER 11.48.17134.0</content>
+			<content-title>More Contents of Subject 1</content-title>
+			<content># More comments
+			more content</content>
+		</section>
+
+		<!-- SECTION 2 -->
+		<section>SECTION2
+			<content-title>Don't do these things</content-title>
+			<content># Don't forget to close out your tags
+			Don't name subjects or sections the same name
+			The collapse feature will cease to work for that section or subject
+ 			Don't put any special characters or whitespace in the subject or section
+			It will also break the collapse feature
+			I know...weird</content>
+			<content-title>FEATURES</content-title>
+			<content>SEND ME A MESSAGE IF YOU WOULD LIKE TO SEE NEW FEATURES ADDED</content>
+		</section>
+
+	</subject>
+	<subject>SUBJECT2
+		<section>BECAUSE
+			<content-title>I needed another subject</content-title>
+			<content># Now you can see
+			How it all works.
+			Please follow if you like</content>
+		</section>
+	</subject>
+</root>
