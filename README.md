@@ -1,7 +1,7 @@
 # splatter
 copy splat code reference generator
 
-## summary
+## Summary
 Put code or other interesting things that you would like to organize for ease of copy splatting in an xml file with the tags specified below.  When you are finished entering your data into the xml file, execute the python script and walah... an HTML file with collapsible buttons is auto-generated.
 
 The xml has 5 tags:<br />
@@ -19,6 +19,10 @@ Has been tested on the following browser versions
 
 Download the javascript and css files.
 If you choose to uncomment the script src and use the internet versions of bootstrap and jquery, it may or may not work
+
+## Known Issues
+  * Don't name subjects or sections the same name The collapse feature will cease to work for that section or subject<br />
+  * Don't put any special characters or whitespace in the subject or section It will also break the collapse feature<br />
 
 ## Screenshot 1
 ![ScreenShot1](https://github.com/dextr0se/splatter/raw/master/images/screenshot1.png "Screen Shot 1")
