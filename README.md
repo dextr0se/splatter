@@ -1,5 +1,5 @@
 # splatter
-copy splat code reference generator
+HTML Generator for Note/Code Snippet References
 
 ## Summary
 Put code or other interesting things that you would like to organize for ease of copy splatting in an xml file with the tags specified below.  When you are finished entering your data into the xml file, execute the python script and walah... an HTML file with collapsible buttons is auto-generated.
