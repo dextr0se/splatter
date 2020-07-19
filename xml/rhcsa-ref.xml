@@ -1,0 +1,1186 @@
+<?xml version="1.0"?>
+<root>RHEL 8 CMDS
+    <subject>MISC
+		<section>GNOME SETTINGS LOCALE
+            <content-title>LANGUAGE SETTINGS</content-title>
+			<content>/etc/locale.conf  #SYSTEM-WIDE LOCALE SETTINGS
+            /etc/vconsole.conf  #VIRTUAL CONSOLE SETTINGS tty
+            gnome-control-center region
+            LANG=fr_FR.utf8
+            localectl
+            localectl set-local LANG=fr_FR.utf8</content>
+            <content-title>LANGUAGE PACKS</content-title>
+            <content>yum list langpacks-*
+            yum install langpacks-fr
+            yum info langpacks-fr
+            yum repoquery --whatsupplements langpacks-fr
+            /usr/share/X11/xkb/rules/base.lst</content>
+        </section> <!-- END: GNOME SETTINGS LOCALE -->
+    </subject> <!-- END: MISC -->
+    
+
+    <subject>1. ACCESS AND SUPPORT
+        <section>SSH
+            <content-title>COMMANDS</content-title>
+            <content>ssh remoteuser@remotehost\
+            ssh-keygen
+            ssh-keygen -f .ssh/mykey
+            ssh-copy-id -i .ssh/mykey.pub remoteuser@remotehost
+            ssh -i .ssh/mykey remoteuser@remotehost
+            # non-interactive (auto) authentication (w/password)
+            ssh-keygen -f .ssh/mykey-with-password
+            ssh-copy-id -i .ssh/mykey-with-password
+            eval $(ssh-agent)
+            ssh-add  #Loads the default key id_rsa
+            ssh-add .ssh/mykey-with-password
+            ssh -i .ssh/mykey-with-password remoteuser@remotehost
+            exit or Ctrl+D</content>
+            <content-title>SECURE SSHD</content-title>
+            <content>sudo vim /etc/ssh/sshd_config
+            PermitRootLogin no
+            PasswordAuthentication no 
+            sudo systemctl restart sshd</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>intro(1)
+            bash(1)
+            console(4)
+            pts(4)
+            ssh(1)
+            ssh-keygen(1)
+            ssh-copy-id(1)
+            ssh-agent(1)
+            ssh-add(1)</content>
+            <content-title>FILE LOCATIONS</content-title>
+            <content>~/.ssh/id_rsa (0600) &amp; ~/.ssh/id_rsa.pub (0644) #keygen default files</content>
+            <content-title>HYPERLINKS</content-title>
+            <content>https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/htmlsingle/
+securing_networks/assembly_using-secure-communications-with-opensshsecuring-
+networks</content>
+        </section> <!-- END: SSH -->
+
+        <section>RED HAT SUPPORT
+            <content-title>Red Hat Customer Portal</content-title>
+            <content>https://access.redhat.com</content>
+            <content-title>Red Hat Support Tool</content-title>
+            <content>redhat-support-tool  #Enter support tool interpreter
+            Command (? for help): search How to manage SSH keys
+            redhat-support-tool kb 253273  #Access Knowledge Base Articles</content>
+            <content-title>Bug Reports</content-title>
+            <content>1. Define the problem - clearly state problem and symptoms
+            2. Gather background info - products/versions diagnostic info sosreport kdump
+            3. Determine severity level - Low, Medium, High, Urgent - High &amp; Urgent contact support center
+            redhat-support-tool
+            Command (? for help): opencase  #Follow prompts
+            Command (? for help): opencase --product="Red Hat Enterprese Linux" --version="7.0"
+            sosreport
+            redhat-support-tool addattachment -c 01034421 /path/to/sosreport
+            Command (? for help): listcases
+            redhat-support-tool modifycase --status=Closed 01034421
+            kdump  #Attach kernel backtrace report
+            Command (? for help):  analyze  #Log file analysis</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>sosreport(1)</content>
+            <content-title>HYPERLINKS</content-title>
+            <content>https://developer.redhat.com
+            https://access.redhat.com/site/articles/445443
+            https://access.redhat.com/site/videos/534293
+            https://access.redhat.com/site/support/policy/support_process/
+            https://access.redhat.com/site/help/</content>
+        </section> <!-- END: RED HAT SUPPORT -->
+        
+        <section>RED HAT INSIGHTS
+            <content-title>COMMANDS</content-title>
+            <content>yum install insights-client
+            insights-client --register  #Activate Red Hat Insights
+            #verify system is visible at https://cloud.redhat.com/insights
+            insights-client  #Update metadata
+            subscription-manager register --auto-attach</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>insights-client(8)
+            insights-client.conf(5)</content>
+            <content-title>FILE LOCATIONS</content-title>
+            <content>/etc/insights-client.conf</content>
+            <content-title>HYPERLINKS</content-title>
+            <content>https://cloud.redhat.com/insights
+            https://access.redhat.com/products/red-hat-insights/#getstarted
+            https://access.redhat.com/documentation/en-us/red_hat_insights/1.0/html-single/
+release_notes/#release_information
+            https://access.redhat.com/articles/1598863
+            https://access.redhat.com/articles/2025273</content>
+        </section> <!-- END: RED HAT INSIGHTS -->
+    </subject> <!-- END: ACCESS & SUPPORT-->
+    
+
+    <subject>2. FILE SYSTEM
+        <section>MANAGING FILES
+            <content-title>COMMANDS</content-title>
+            <content>mkdir directory
+            mkdir -p dirA/dir1 dirA/dir2 dirA/dir3/dirx
+            cp file new-file
+            cp -r directory new-directory
+            mv file new-file
+            rm file
+            rm -r directory
+            rm -ri directory  #Interactively prompt for confirmation
+            rmdir directory  #Empty directory
+            rm -d directory  #Empty directory</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>hier(7)
+            cp(1)
+            mkdir(1)
+            mv(1)
+            rm(1)
+            rmdir(1)</content>
+            <content-title>HYPERLINKS</content-title>
+            <content>https://fedoraproject.org/wiki/Features/UsrMove</content>
+        </section> <!-- END: MANAGING FILES -->
+        
+        <section>LINKS
+            <content-title>HARD LINKS</content-title>
+            <content>ln existing-file new-hardlink-file
+            ls -li *-file  #Inodes will be the same
+            #Hard links points and name to data on a storage device
+            #Data is only deleted when last hard link is deleted
+            #Hard links only work with regular files (no dirs or special files)
+            #Hard links must be on the same file system
+            df -h</content>
+            <content-title>SOFT-SYMBOLIC LINKS</content-title>
+            <content>ln -s existing-file new-symlink-file
+            ls -li *-file  #Inodes will be different
+            #Soft links point a name to another name that point to data on storage device
+            #Can point to regular files, directories, and special files
+            #Can link files on different file systems
+            #If regular file is deleted, soft link will be broke
+            cd -P  #update name of actual directory is soft-link dir</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>ln(1)
+            info ln</content>
+        </section> <!-- END: LINKS -->
+    </subject> <!-- END: FILE SYSTEM -->
+
+
+    <subject>3. LOCAL USERS AND GROUPS
+        <section> USERS AND GROUPS
+            <content-title>COMMANDS</content-title>
+            <content>id
+            id user01 user02
+            ls -l file1
+            ls -ld dir1
+            ps -au  #view all processes (a) and user associated w/process (u)
+            GECOS: comma-delimited, users full name, location, phone, contact info
+            GECOS: General Electric Comprehensive Operating System</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>id(1)
+            passwd(5)
+            group(5)
+            info libc - Section 30: Users and Groups</content>
+            <content-title>FILE LOCATIONS</content-title>
+            <content>/etc/passwd
+            /etc/group</content>
+        </section> <!-- END: USERS AND GROUPS-->
+
+        <section>SUPERUSER ACCESS - SUDO
+            <content-title>COMMANDS</content-title>
+            <content>su - user02
+            su -  # '-' starts login shell with environ as new login user
+            su    # starts non-login shell uses original user's environ
+            su -c cat /etc/shadow  # run command as user
+            # >= RHEL 7 - wheel group gives user sudo to run cmds as any user and root
+            sudo -i  #Start interactive root shell w/associated shell login scripts
+            sudo -s  #Start basic shell
+            visudo  #Make changes to sudoers file
+            # Make 'sudo -i' more like 'su -'
+            # visudo - change following line
+            # OLD:  Defaults      secure_path = /sbin:/bin:/usr/sbin:/usr/bin
+            # NEW:  Defaults      secure_path = /usr/local/bin:/usr/bin
+            #       Defaults>root secure_path = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>info su
+            su(1)
+            sudo(8)
+            visudo(8)
+            sudoers(5)
+            info libc persona - Section 30.2: The Persona of a Process</content>
+            <content-title>FILE LOCATIONS</content-title>
+            <content>/etc/sudoers
+            /etc/sudoers.d</content>
+        </section> <!-- END: SUPERUSER ACCESS - SUDO -->
+        
+        <section>LOCAL USER ACCOUNTS
+            <content-title>COMMANDS</content-title>
+            <content>useradd user01
+            tail /etc/passwd
+            usermod -c COMMENT -g PRI-GID -G LIST-SUPP-GROUPS -Ga APPEND-SUPP-GROUPS -d /home/dir -dm /move/home/dir -s SHELL -L -U
+            userdel user01
+            userdel -r user01
+            find / -nouser -o -nogroup  #Find all unowned files and dirs
+            passwd user01
+            #UID 0 - root
+            #UID 1-200 - system users, statically assigned to processes by RH
+            #UID 201-999 - system users, dynamically assigned to processes that do not own files
+            #1000+ - regular users
+            Prior RHEL7 - UID 1-499 system users/processes
+            Prior RHEL7 - UID 500+ regular users</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>useradd(8)
+            usermod(8)
+            userdel(8)</content>
+            <content-title>FILE LOCATIONS</content-title>
+            <content>/etc/login.defs</content>
+        </section> <!-- LOCAL USER ACCOUNTS -->
+
+        <section>LOCAL GROUP ACCOUNTS
+            <content-title>COMMANDS</content-title>
+            <content>sudo groupadd -g 10000 group01
+            tail /etc/group
+            sudo groupadd -r group02  #'-r' Create system group
+            #GID 0-999 - system Groups
+            #GID 1000+ - private groups
+            sudo groupmod -n newgroup02 group02  #change group name
+            sudo groupmod -g 20000 newgroup02  #change group id
+            tail /etc/group
+            sudo groupdel newgroup02  #cannot remove group if pri group of a user
+            find / -nouser -o -nogroup  #Find all unowned files and dirs</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>group(5)
+            groupadd(8)
+            groupdel(8)
+            usermod(8)</content>
+            <content-title>FILE LOCATIONS</content-title>
+            <content>/etc/login.defs</content>
+        </section><!-- LOCAL GROUP ACCOUNTS -->
+        
+        <section>USER PASSWORDS
+            <content-title>COMMANDS</content-title>
+            <content>chage user01  #Interactive Menu
+            chage -m 0 -M 90 -W 7 -I 14 user02
+            chage -d 0 user03  #Force user to change password on next login
+            date -d "+90 days" +%F
+            date -d "+45 days" -u  #UTC date in the future
+            chage -E 2020-12-20 user03  
+            chage -l user03
+            chage -E -1 user03  # Resets to never
+            # -m Minimum - age since last password change user can change password again
+            # -M Maximum - days before password expiration
+            # -W Warning - day to start warning message before password expiration
+            # -I Inactive - days user can still login after password expiration date
+            # -d Last password change date
+            # -E change account expiration date
+            # -l list password aging details
+            # COMPUTE EPOCH (1970JAN1) FROM CURRENT DATE
+            echo $((`date --utc --date "$1" +%s`/86400))</content>
+            <content-title>RESTRICTING USER ACCESS</content-title>
+            <content>sudo usermod -L user03
+            sudo usermod -L -e 2020-09-10 user03
+            usermod -s /sbin/nologin user03</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>chage(1)
+            usermod(8)
+            shadow(5)
+            crypt(3)</content>
+            <content-title>FILE LOCATIONS</content-title>
+            <content>/etc/login.defs</content>
+        </section> <!-- END: USER PASSWORDS -->
+    </subject> <!-- END: LOCAL USERS AND GROUPS -->
+
+
+    <subject>4. FILE PERMISSIONS
+        <section>
+            <content-title>COMMANDS</content-title>
+            <content>#chmod WhoWhatWhich file|directory
+            #Who - u, g, o, a
+            #What - +, -, =
+            #Which - r, w, x (X only sets execute if already set: for recursive)
+                # Conditional X is for recursion, only works with chmod g+rwX somedir
+                # if user execute permission is set, it will set the group execute permission
+            chmod -R g+rwX somedir
+            chmod go-rw file1  #Remove read/write for group
+            chmod a+x file2  #Add execute for everyone
+            chown user01 somefile
+            chown user01:group01 somefile
+            chown :group05 somefile
+            chown -R root:root somedir</content>
+            <content-title>SPECIAL PERMISSIONS</content-title>
+            <content>u+s (suid) #File: Executes as the user owner Dir: No effect
+            g+s (sgid) #File: Executes as the group owner Dir: new files have group set to directory's group owner
+            o+t (sticky) #File: No effect Dir: Users can only remove files that they own
+            # Capital S: exec permission is not set
+            # file executes with root permissions
+            ls -l /usr/bin/passwd
+            -rwsr-xr-x. 1 root root 35504 Jul 16  2010 /usr/bin/passwd  
+            # Any new files will belong to group systemd-journal
+            ls -ld /run/log/journal
+            drwxr-sr-x. 3 root systemd-journal 60 May 18 09:15 /run/log/journal #Any new files will be group systemd-journal
+            # file executes with group permissions slocate
+            ls -ld /usr/bin/locate
+            -rwx--s--x. 1 root slocate 47128 Aug 12 17:17 /usr/bin/locate
+            # Only owner of file can delete their files - Captial T is other execute permission not set
+            ls -ld /tmp
+            drwxrwxrwt. 39 root root 4096 Feb 8 20:52 /tmp
+            # Example SETGID BIT on directory
+            chmod g+s directory
+            chmod 2770 directory</content>
+            <content-title>DEFAULT FILE PERMISSIONS</content-title>
+            <content>#default permissions for new directories 0777
+            #default permissions for new files 0666
+            #umask 0002 - removes the write permissions for all new files and dirs
+            umask
+            umask 0007
+            #SHELL Startup Script to change umask
+            sudo vim /etc/profile.d/local-umask.sh
+            # Overrides default umask configuration
+            # Users greater than 199 with a matching group and user names
+            if [ $UID -gt 199 ] &amp;&amp; [ "`id -gn`" = "`id -un`" ]; then
+                umask 007
+            else
+                umask 022
+            fi</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>ls(1)
+            chmod(1)
+            chown(1)
+            chgrp(1)
+            bash(1)
+            ls(1)
+            umask(1)</content>
+            <content-title>FILE LOCATIONS</content-title>
+            <content>/etc/profile  #system umask value
+            /etc/bashrc  #system umask value
+            ~/.bash_profile  #user override umask value
+            ~/.bashrc  #user override umask value</content>
+        </section>
+    </subject> <!-- END: FILE PERMISSIONS -->
+
+
+    <subject>5. SELINUX SECURITY
+        <section>SELINUX MODES
+            <content-title>COMMANDS</content-title>
+            <content>ps axZ
+            ps -ZC httpd
+            ls -Z /home
+            ls -Z /var/www
+            getenforce
+            setenforce
+            setenforce 0
+            setenforce Enforcing
+            getenforce
+            #KERNEL BOOT PARAMETERS
+            # enforcing=0    - permissive mode
+            # enforcing=1    - enforcing mode
+            # selinux=0      - disable</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>getenforce(8)
+            setenforce(8)
+            selinux_config(5)</content>
+            <content-title>FILE LOCATIONS</content-title>
+            <content>/etc/selinux/config #RHEL 7/8
+            /etc/sysconfig/selinux  #RHEL 6</content>
+        </section> <!-- END: SELINUX MODES -->
+
+        <section>SELINUX FILE CONTEXTS AND BOOLEANS
+            <content-title>COMMANDS</content-title>
+            <content>#Moving a File Keeps Original SELinux context
+            #Copying a File inherits SELinux context from Destination directory
+            ls -Zd
+            #Ensure all file in a directory have the correct context
+            semanage fcontext -l
+            restorecon -Rv /var/www
+            restorecon -RFvv /virtual  # F is for custom cases
+            #Use semanage to add a context to a new directory
+            mkdir /virtual
+            touch /virtual/index.html
+            ls -Zd /virtual/
+            drwxr-xr-x. root root unconfined_u:object_r:default_t:s0 index.html
+            semanage fcontext -a -t httpd_sys_content_t '/virtual(/.*)?'
+            restorecon -RFvv /virtual
+            ls -Zd /virtual/
+            drwxr-xr-x. root root system_u:object_r:httpd_sys_content_t:s0 /virtual/
+            #SELinux Booleans
+            getsebool  # List booleans and their state 
+            getsebool -a | grep homedirs
+            setsebool  # Modify boolean states 
+            setsebool -P {boolean} on|off  # Persistently Modifies the SELinux Policy
+            semanage boolean -l  # Displays boolean status and persistence
+            semanage boolean -l -C  # List booleans changed from default state
+            ## SELinux Violations
+            # Install setroubleshoot-server package to send messages to /var/log/messages
+            tail /var/log/audit/audit.log | grep AVC
+            tail /var/log/messages | grep sealert
+            sealert -l {UUID}  # Specific incident
+            sealert -a /var/log/audit/audit.log  # Reports on all incidents
+            ausearch -m AVC -ts recent
+            # Apply fix carefully from sealert - then run restorecon -Rv {directory}</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>chcon(1)
+            restorecon(8)
+            semanage(8)
+            semanage-fcontext(8)
+            man -k '_selinux'  # yum -y install selinux-policy-doc &amp;&amp; mandb &amp;&amp; updatedb
+            booleans(8)
+            getsebool(8)
+            setsebool(8)
+            semanage(8)
+            semanage-boolean(8)
+            sealert(8)</content>
+        </section> <!-- END: SELINUX FILE CONTEXTS AND BOOLEANS -->
+    </subject> <!-- END: SELINUX SECURITY -->
+
+
+    <subject>6. TUNING SYSTEM PERFORMANCE
+        <section>SIGNALS
+            <content-title>COMMANDS</content-title>
+            <content>Ctrl-z  # Suspend
+            Ctrl-c  # kill
+            Ctrl-\  # Core Dump
+            jobs -l
+            kill -SIGTERM %{job_number}
+            kill -l
+            pgrep {command name}
+            killall {command name}
+            pkill {command name | UID | GID | Parent | Terminal}
+            jobs -l
+            fg %3  # Bring job 3 to foreground
+            ## FORCE LOGOFF OF USER
+            w  # identify tty
+            pgrep -l -u user01
+            pkill -SIGTERM -u user01  # Try SIGTERM then SIGINT then SIGKILL
+            pgrep -l -u user01
+            w -h -u user01  # identify tty
+            pkill -t tty3
+            pgrep -l -u user01
+            pkill -SIGKILL -t tty3
+            ## PSTREE Method of force logoff of user
+            pstree -p user01
+            pkill -P 8391
+            pkill -SIGKILL -P 8391
+            pgrep -l -u user01</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>info libc signal - Section 24: Singal Handling
+            info libc processes - Section 26: Processes
+            kill(1)
+            killall(1)
+            pgrep(1)
+            pkill(1)
+            pstree(1)
+            signal(7)
+            w(1)</content>
+        </section> <!-- END: SIGNALS -->
+        <section>PROCESS ACTIVITY
+            <content-title>COMMANDS</content-title>
+            <content>uptime
+            lscpu
+            # TOP COMMAND
+            # PID | USER | VIRT MEM (VSZ) | RES physical mem (RSS) | S process state | TIME cpu | COMMAND
+            # Process States: D - uninteruptible sleep  R - running/runnable  S - sleep  T - stopped/traced  Z - zombie
+            # Basic Keys in TOP
+            # ?/h - help
+            # l,t,m - toggle load, threads, memory header lines
+            # 1 - show CPU summary
+            # s - screen rate in secs 1, 0.5
+            # b - reverse highlighting for running processes
+            # B - enables bold in display
+            # H - show summary threads
+            # u - Filter for any username
+            # M - sorts by memory usage in descending order
+            # P - sorts by processor util in descending order
+            # L - search string/pid
+            # t - toggle cpu display
+            # k - kill a process (PID, then signal)
+            # r - renice a process (PID, nice_value)
+            # W - write current display configuration for next time top is used
+            # q - quit
+            # f - manage the columns</content>
+            <content-title>CALCULATE CPU LOAD</content-title>
+            <content># From lscpu, the system has four logical CPUs, so divide by 4:
+            # load average: 2.92, 4.48, 5.20
+            # divide by number of logical CPUs:    4    4    4
+            #                                   ---- ---- ----
+            # per-CPU load average:             0.73 1.12 1.30
+            #
+            # Anything above a 1 is overloaded
+            # This system's load average appears to be decreasing.
+            # With a load average of 2.92 on four CPUs, all CPUs were in use ~73% of the time.
+            # During the last 5 minutes, the system was overloaded by ~12%.
+            # During the last 15 minutes, the system was overloaded by ~30%.</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>ps(1)
+            top(1)
+            uptime(1)
+            w(1)</content>
+        </section> <!-- END: PROCESS ACTIVITY -->
+        
+        <section>ADJUSTING TUNING PROFILES
+            <content-title>COMMANDS</content-title>
+            <content>yum install tuned
+            systemctl enable --now tuned
+            # TUNED PROFILES
+            # - Power-Saving Profiles
+            # - Performace-Boosting Profiles
+            #   - Low Latency for storage and network
+            #   - High throughput for storage and network
+            #   - Virtual machine performance 
+            #   - Virtualization host performance 
+            # RHEL 8 TUNING PROFILES
+            # - balanced: systems that need power saving and performance 
+            # - desktop: faster response to interactive apps 
+            # - throughput-performance: maximum throughput 
+            # - latency-performance: low latency at expense of power consumption 
+            # - network-latency: provides low network latency 
+            # - network-throughput: maximum network throughput 
+            # - powersave: maximum power saving 
+            # - oracle: optimized for oracle database loads 
+            # - virtual-guest: max performance as virtual machine 
+            # - vitual-host: max performance as host for virtual machines 
+            tuned-adm active 
+            tuned-adm list
+            tuned-adm profile  # List profiles
+            tuned-adm profile {profilename}
+            tuned-adm recommend
+            tuned-adm off
+            tuned-adm active</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>tuned(8)
+            tuned.conf(5)
+            tuned-main.conf(5)
+            tuned-adm(1)</content>
+        </section> <!-- END: ADJUSTING TUNING PROFILES -->
+        <section>PROCESS SCHEDULING/PRIORITIZATION
+            <content-title>COMMANDS</content-title>
+            <content># USE TOP TO DISPLAY NICE LEVELS
+            # NI Column - Nice Value 
+            # PR Column - Scheduled Priority
+            ps axo pid,comm,nice,cls --sort=-nice
+            # TS - SCHED_NORMAL scheduling policy
+            ps axo pid,comm,nice
+            nice -n 15 {command}  # Start a program/app with higher nice value
+            renice -n 19 {PID}
+            top  # renice with r followed by PID and new nice value</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>nice(1)
+            renice(1)
+            top(1)
+            sched_setscheduler(2)</content>
+        </section>
+    </subject> <!-- END: TUNING SYSTEM PERFORMANCE -->
+
+
+    <subject>7. PACKAGE MANAGER
+        <section>REDHAT SYSTEM REGISTRATION
+            <content-title>COMMANDS</content-title>
+            <content># Activation keys allow registration without username password/automated deployments
+            subscription-manager register --username=myusername --password=mypass
+            subscription-manager list --available | less
+            subscription-manager attach --auto
+            subscription-manager attach --pool=poolID
+            subscription-manager list --consumed
+            subscription-manager unregister</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>subscription-manager(8)
+            rct(8)</content>
+            <content-title>FILE LOCATIONS</content-title>
+            <content>/etc/pki/product  # cert w/RH products install on system
+            /etc/pki/consumer  # cert w/RH account which system is registered
+            /etc/pki/entitlement  # cert w/subscription attached to system</content>
+            <content-title>HYPERLINKS</content-title>
+            <content>https://access.redhat.com/site/articles/433903</content>
+        </section> <!-- END: REDHAT SYSTEM REGISTRATION -->
+        
+        <section>YUM
+            <content-title>COMMANDS</content-title>
+            <content>yum help  # yellowdog update manager
+            yum list 'http*'
+            yum search {KEYWORD}  # searches name and summary only
+            yum search all {KEYWORDS}  # searches name,summary,description
+            yum info {PACKAGENAME}
+            yum provides {PATHNAME}  # i.e. /var/www/html or */mount
+            yum install {PACKAGENAME}
+            yum reinstall {PACKAGENAME}
+            yum update {PACKAGENAME}
+            yum list kernel
+            yum remove {PACKAGENAME}
+            yum group list
+            yum grouplist hidden -v  # short names
+            yum group info {GROUPNAME}
+            yum group install {GROUPNAME}
+            yum group mark install {GROUPNAME}  # Mark a group as installed, any missing packages are install on next update
+            ## YUM HISTORY
+            tail -5 /var/log/dnf.rmp.log
+            yum history
+            yum history list 5
+            yum history info 5
+            yum history undo 5  # kind of buggy, just use remove
+            ## YUM REPOS
+            yum repolist all
+            yum-config-manager --enable {REPONAME}
+            yum-config-manager --disable {REPONAME}
+            yum-config-manager --add-repo="http://dl.fedoraproject.org/pub/epel/8/x86_64/"
+            yum localinstall  # use to download GPG and RPM package
+            # Install GPG before packages
+            rpm --import http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
+            yum install http://dl.fedoraproject.org/pub/epel/8/x86_64/e/epel-release-8-2.noarch.rpm
+            cat /etc/yum.repos.d/epel.repo</content>
+            <content-title>PACKAGE MODULE STREAMS</content-title>
+            <content>yum module list
+            yum module list --installed
+            yum module list {module_name}
+            yum module info {module_name}
+            yum module info --profile {module_name:stream_number}
+            yum module enable {module_name}
+            yum module disable {module_name}
+            yum module install {module_name}
+            yum module install {module_name:stream_number/profile_name}
+            yum install @{module_name}
+            # REMOVE A MODULE
+            yum module remove {module_name}
+            yum module disable {module_disable}
+            yum module reset {module_name}
+            yum distro-sync</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>yum(1)
+            yum.conf(5)
+            yum-config-manager(1)</content>
+            <content-title>HYPERLINKS</content-title>
+            <content>https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/
+html-single/configuring_basic_system_settings/installing-software-with-yum_
+configuring-basic-system-settings
+            https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/htmlsingle/
+installing_managing_and_removing_user_space_components/
+            https://docs.fedoraproject.org/en-US/modularity/</content>
+        </section> <!-- END: YUM -->
+    </subject> <!-- END: PACKAGE MANAGER -->
+
+
+    <subject>8. BASIC STORAGE
+        <section>MOUNTING FS
+            <content-title>COMMANDS</content-title>
+            <content>## MANUAL FS MOUNTING
+            lsblk
+            mount /dev/vdb1 /mnt/data  # mount by device
+            lsblk -fp
+            blkid /dev/vdb1
+            mount UUID="{some-long-uid-number}" /mnt/data  # mount by UUID recommended
+            fdisk /dev/{dev}
+            gdisk /dev/{dev}
+            ## AUTO FS MOUNTING
+            # mount to /run/media/{user_name}/{label}
+            ## UNMOUNTING FS
+            lsof /mnt/data
+            umount /mnt/data</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>lsblk(8)
+            mount(8)
+            umount(8)
+            lsof(8)</content>
+        </section> <!-- END: MOUNTING FS -->
+
+        <section>PARTITIONS/FS/PERSISTENT MOUNTS
+            <content-title>COMMANDS</content-title>
+            <content>parted /dev/vda print
+            parted /dev/vda
+            parted /dev/vda unit {display_size} print 
+            # Display sizes
+            # s - sector
+            # B - Byte 
+            # MiB, GiB, or TiB (powers of 2)
+            # MB, GB, TB (powers of 10)
+            ## WIPE EXISTING PARTITION TABLE - DATA BECOMES INACCESSIBLE
+            parted /dev/vdb mklabel msdos  # Write MBR disk label to disk
+            parted /dev/vdb mklabel gpt  # Write GPT disk label to disk
+            ## CREATE MBR PARTITION
+            parted /dev/vdb
+            (parted) mkpart
+            Partition type? primary #for more than four partitions 3 pri &amp; 1 extended w/multiple logical partitions
+            File system type? {xfs | ext4}  # parted /dev/vdb help mkpart - lists supported fs types
+            Start? 2048s
+            End? 1000MB  # Size = End - Start
+            quit
+            # One-liner
+            parted /dev/vdb mkpart primary xfs 2048s 1000MB
+            partprobe /dev/vdb
+            udevadm settle
+            ## CREATE GPT PARTITION
+            parted /dev/vdb
+            (parted) mkpart
+            Partition name? usersdata
+            File system type? {xfs | ext4}
+            Start? 2048s
+            End? 1000MB
+            quit
+            # one-liner - parted /dev/vdb mkpart usersdata xfs 2048s 1000MB
+            udevadm settle
+            ## DELETE PARTITIONS
+            parted /dev/vdb
+            print
+            rm {partition_number}
+            quit
+            ## CREATING/MOUNTING A FILESYSTEM
+            mkfs.xfs /dev/vdb1
+            mount /dev/vdb1 /mnt  # Manual mount
+            # persistent mount 
+            vim /etc/fstab
+            mount | grep vdb1
+            lsblk --fs  # copy {UUID | mount_dir | fs_type | options | dump | fsck} into /etc/fstab
+            mount -a | mount /{mount_dir}  # verify fstab is correct
+            findmnt --verify  # verify fstab is correct
+            systemctl daemon-reload</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>parted(8)
+            mkfs(8)
+            mount(8)
+            lsblk(8)
+            fstab(5)</content>
+        </section> <!-- PARTITIONS/FS/PERSISTENT MOUNTS -->
+
+        <section>SWAP SPACE
+            <content-title>COMMANDS</content-title>
+            <content>## CREATE SWAP PARTITION
+            parted /dev/vdb print
+            parted /dev/vdb mkpart swap1 linux-swap 1001MB 1257MB
+            parted /dev/vdb print
+            udevadm settle
+            mkswap /dev/vdb2
+            ## ACTIVATE SWAP SPACE
+            free  # displays swap details
+            swapon --show  # displays swap details
+            swapon /dev/vdb2  # non-persistent
+            swapoff /dev/vdb2
+            UUID=235e324...  swap  swap  defaults  0 0  # /etc/fstab persistent swap
+            findmnt --verify
+            systemctl daemon-reload
+            ## SWAP SPACE PRIORITY /etc/fstab
+            swapon --show
+            # 4th column is priority - defaults = -2
+            # set priority - pri=10 | pri=4 
+            # the higher number gets priority </content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>mkswap(8)
+            swapon(8)
+            swapoff(8)
+            mount(8)
+            parted(8)</content>
+        </section> <!-- SWAP SPACE -->
+    </subject> <!-- END: BASIC STORAGE -->
+
+
+    <subject>9. SERVICES &amp; BOOT
+        <section>SYSTEMD SERVICES
+            <content-title>COMMANDS</content-title>
+            <content>systemctl list-unit --type=service  # only loaded/active services
+            systemctl list-unit --type=service --all  # displays all loaded services
+            systemctl  # displays everything loaded/active
+            systemctl list-unit-files  # state of all unit files installed
+            systemctl status {name.type}
+            # verification commands
+            systemctl is-active {name.type}
+            systemctl is-enabled {name.type}
+            systemctl is-failed {name.type}
+            systemctl --failed --type=service
+            # starting/stopping services
+            systemctl start {name.type}
+            systemctl stop {name.type}
+            systemctl restart {name.type}  # new PID created
+            systemctl reload {name.type}  # reloads configuration files
+            systemctl reload-or-restart {name.type}  # will reload if able, otherwise restart
+            # service dependencies
+            systemctl list-dependencies {name.type}
+            systemctl list-dependencies {name.type} --reverse
+            # masking and unmasking services
+            systemctl mask {name.type}  # sends service to /dev/null when conflicts w/other services
+            systemctl unmask {name.type}
+            # enabling services
+            systemctl enable {name.type}  # creates syn-link /usr/lib/systemd/system
+            systemctl disable {name.type}</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>systemd(1)
+            systemd.unit(5)
+            systemd.service(5)
+            systemd.socket(5)
+            systemctl(1)</content>
+        </section> <!-- END: SYSTEMD SERVICES -->
+
+        <section>TSHOOT BOOT ISSUES
+            <content-title>COMMANDS</content-title>
+            <content>systemctl poweroff | poweroff
+            systemctl reboot | reboot
+            systemctl halt | halt
+            systemctl list-units --type=target --all  # list targets
+            systemctl list-dependencies graphical.target | grep target  # list target deps
+            systemctl cat graphical.target | grep AllowIsolate  # only targets with isolate=yes
+            systemctl isolate multi-user.target  # Switch to a different target
+            systemctl get-default  # lists default target
+            systemctl set-default {new.target}
+            # switch to different target at boot
+            systemd.unit=rescue.target  # add line to kernel command line from boot loader (Ctrl+x)
+            ## RESETTING ROOT PASSWORD
+            # Interrupt boot loader, edit line starts w/linux, append rd.break, Ctrl+x
+            mount -o remount,rw /sysroot
+            chroot /sysroot
+            passwd root
+            touch /.autorelabel
+            exit &amp; exit
+            ## ALTERNATE RESET ROOT PASSWORD
+            # Interrupt boot loader, edit line starts w/linux, append rd.break, Ctrl+x 
+            mount -o remount,rw /sysroot
+            chroot /sysroot
+            passwd root
+            load_policy -i 
+            restorecon -Rv /etc
+            exit &amp; exit
+            ## CHANGE JOURNAL LOGS TO BE PERSISTENT
+            vim /etc/systemd/journald.conf
+            # Storage=persistent
+            systemctl restart systemd-journald.service
+            journalctl -b -1 -p err  # inspect previous boot logs
+            ## REPAIRING SYSTEMD BOOT ISSUES
+            systemctl enable debug-shell.service   # spawns root shell tty9 during boot Ctrl+Alt+F9
+            # add systemd.unit=rescue.target | systemd.unit=emergency.target to kernel cmdline boot loader
+            mount -o remount,rw /
+            systemctl list-jobs  # check on any waiting jobs
+            ## EMERGENCY SHELL
+            vim /etc/fstab
+            systemctl daemon-relead</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>bootup(7)
+            dracut.bootup(7)
+            dracut.cmdline(7)
+            systemd-jounald(8)
+            jounald.conf(5)
+            journalctl(1)
+            lsinitrd(1)
+            systemd.target(5)
+            systemd.special(7)
+            systemd-fsck(8)
+            systemd-fstab-generator(8)
+            systemd.mount(5)
+            sulogin(8)
+            systemctl(1)</content>
+        </section><!-- END: BOOT TARGET -->
+    </subject> <!-- END: SERVICES & BOOT -->
+
+
+    <subject>10. NETWORKING
+        <section>VIEWING/MODIFYING NETWORK SETTINGS
+            <content-title>COMMANDS</content-title>
+            <content>ip link show
+            ip addr show {interface_name}
+            ip -s link show {interface_name}  # display link details
+            ping -c3 1.1.1.1
+            ping6 {ipv6_addr}
+            ping6 ff02::1%{interface_name}
+            ip route
+            ip -6 route
+            tracepath {ipv4_addr}
+            tracepath6 {ipv6_addr}
+            # well known ports /etc/services
+            ss -punta
+            netstat -punta
+            nmcli dev status  # display status of network devices
+            nmcli con show
+            nmcli con show {con-name}
+            nmcli con show --active
+            nmcli con reload
+            nmcli con add con-name {con-name} type ethernet ifname {con-name}
+            nmcli con add con-name {con-name} type ethernet ifname {con-name} ipv4.method manual ipv4.address 192.168.0.5/24 ipv4.gateway 192.168.0.254
+            nmcli con add con-name {con-name} type ehternet ifname {con-name} ipv6address 2001:db8:0:1::c000:207/64 ipv6.gateway 2001:db8:0:1::1 ipv4.address 192.0.2.7/24 ipv4.gateway 192.0.2.1
+            nmcli con up static-ens3
+            nmcli dev dis ens3
+            nmcli con down static-ens3  # Network Manager autoconnect may enable
+            nmcli con show static-ens3
+            nmcli con mod static-ens3 ipv4.address 192.0.2.2/24 ipv4.gateway 192.0.2.254
+            nmcli con mod static-ens3 ipv6.address 2001:db8:0:1::a00:1/64 ipv6.gateway 2001:db8:0:1::1
+            nmcli con del static-ens3
+            nmcli gen permissions
+            # Make changes in config file /etc/sysconfig/network-scripts
+            ipv4.method manual == BOOTPROTO=none
+            ipv4.method auto   == BOOTPROTO=dhcp
+            ipv4.addresses "192.168.0.11/24 192.168.0.254"  == IPADDR0=192.168.0.11 PREFIX0=24 GATEWAY0=192.168.0.254
+            ipv4.dns 1.1.1.1  == DNS0=1.1.1.1
+            ipv4.dns-search my.domain == DOMAIN=my.domain 
+            ipv4.ignore-auto-dns true == PEERDNS=no   # ignore DNS info from DHCP server
+            ipv6.method manual == IPV6_AUTOCONF=no 
+            ipv6.method auto   == IPV6_AUTOCONF=yes  # uses SLAAC from rtr advertisements 
+            ipv6.method dhcp   == IPV6_AUTOCONF=no DHCPV6C=yes
+            ipv6.addresses "2001::a/64 2001::1"  == IPV6ADDR=2001::a/64  IPV6_DEFAULTGW=2001::1
+            ipv6.dns ...  == DNS0= ... 
+            ipv6.dns-search my.domain  == DOMAIN=my.domain 
+            ipv6.ignore-auto-dns true  == IPV6_PEERDNS=no   # ignore DNS info from DHCP server
+            connection.autoconnect yes == ONBOOT=yes 
+            connection.id ens3 == NAME=ens3
+            connection.interface-name ens3  == DEVICE=ens3
+            802-3-ethernet.mac-address 11:22:33:44:55:66  == HWADDR=11:22:33:44:55
+            ## Modify Network Configuartion File Directly 
+            #   STATIC                  DYNAMIC             EITHER
+            BOOTPROTO=none              BOOTPROTO=dhcp      DEVICE=ens3
+            IPADDR0=192.168.0.11                            NAME="static-ens3"
+            PREFIX0=24                                      ONBOOT=yes
+            GATEWAY0=192.168.0.254                          UUID=f3a...ad3
+            DEFROUTE=yes                                    USERCTL=yes
+            DNS1=1.1.1.1
+            # apply new settings
+            nmcli con reload
+            nmcli con down "static-ens3"
+            nmcli con up "static-ens3"
+            ## HOSTNAME 
+            hostname
+            hostnamectl set-hostname host@my.domain 
+            hostnamectl status 
+            cat /etc/hostname  # RHEL6 and lower /etc/sysconfig/network file
+            ## DNS 
+            /etc/nsswitch.conf  # determines how to resolve names
+            cat /etc/hosts  # checked first for resolution 
+            getent hosts {hostname}   # used to test for /etc/hosts file resolution
+            cat /etc/resolv.conf  # domain &amp; search: last instance wins for resolution - 3 nameserver allowed
+            # update /etc/resolv.conf file
+            nmcli con mod {ID} ipv4.dns {IP}  # remove/replace dns entry
+            nmcli con mod {ID} +ipv4.dns {IP}  # adds dns entry and (-) will remove
+            nmcli con mod {ID} +ipv6.dns 2001::8888 
+            nmcli con down {ID}
+            nmcli con up {ID}
+            host some.server.com  # tests name resolution of DNS
+            host {IP_ADDR}  # test reverse lookup
+            # DHCP will auto overwrite /etc/resolv.conf unless overriden with PEERDNS=no 
+            nmcli con mod "{name}" ipv4.ignore-auto-dns yes</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>ip-link(8)
+            ip-address(8)
+            ip-route(8)
+            ip(8)
+            ping(8)
+            tracepath(8)
+            traceroute(8)
+            ss(8)
+            netstat(8)
+            NetworkManager(8)
+            nmcli(1)
+            nmcli-examples(5)
+            nm-settings(5)
+            hostnamectl(1)
+            hosts(1)
+            getent(1)
+            resolv.conf(5)
+            hostname(5)
+            ip(8)
+            ip-address(8)</content>
+        </section>
+    </subject> <!-- END: NETWORKING -->
+
+
+    <subject>11. LOGS
+        <section>JOURNALD AND TIMEDATE
+            <content-title>COMMANDS</content-title>
+            <content>logger -p local7.notice "Log entry created by logger"
+            # /etc/logrotate.conf
+            # man rsyslog.conf defines facility.priority 
+            journalctl
+            journalctl -n 5 # shows last 10 logs by default
+            journalctl -f
+            journalctl -p err 
+            journalctl --since today 
+            journalctl --since "2020-01-01 01:00:00" --until "2020-01-02 01:00:00"
+            journalctl --since "-1 hour"
+            journalctl -o verbose 
+            journalctl _SYSTEMD_UNIT=sshd.service _PID=1182
+            ## JOURNALD PERSISTENT STORAGE
+            journalctl | grep -E 'Runtime|System journal'  # displays storage settings
+            vim /etc/systemd/journald.conf  # Storage=persistent 
+            systemctl restart systemd-journald 
+            ls /var/log/journal 
+            journalctl -b {num}  # num is optional, will display preceding boot logs 
+            journalctl -b -1  # limits display to only previous boot 
+            ## TIMEDATE
+            tzselect  # interactive timezone config
+            timedatectl 
+            timedatectl list-timezones
+            timedatectl set-timezone America/Phoenix 
+            timedatectl set-time 09:00:00 
+            timedatectl set-ntp true 
+            vim /etc/chrony.conf  # NTP servers 
+            systemctl restart chronyd 
+            chronyc sources -v </content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content>logger(1)
+            rsyslog.conf(5)
+            # rsyslog manual - /usr/share/doc/rsyslog/html/index.html
+            logrotate(8)
+            journalctl(1)
+            systemd.journal-fields(7)
+            systemd.time(7)</content>
+        </section> <!-- END: JOURNALD AND TIMEDATE -->
+    </subject> <!-- END: LOGS -->
+
+
+    <subject>12. ADVANCED STORAGE
+        <section>LVM
+            <content-title>COMMANDS</content-title>
+            <content>## CREATE LOGICAL VOLUME
+            parted /dev/vdb mklabel msdos
+            parted -s /dev/vdb mkpart primary 1MiB 769MiB
+            parted -s /dev/vdb mkpart primary 770MiB 1026MiB 
+            parted -s /dev/vdb set 1 lvm on 
+            parted -s /dev/vdb set 2 lvm on 
+            pvcreate /dev/vdb2 /dev/vdb1 
+            vgcreate vg01 /dev/vdb2 /dev/vdb1 
+            lvcreate -n lv01 -L 700M vg01 
+            pvdisplay /dev/vdb1
+            pvdisplay /dev/vdb2
+            vgdisplay vg01
+            lvdisplay lv01
+            mkfs -t xfs /dev/vg01/lv01 
+            mkdir /mnt/data 
+            vim /etc/fstab  # /dev/vg01/lv01  /mnt/data  xfs  defautls  0 0 
+            mount /mnt/data 
+            ## REMOVE LOGICAL VOLUME 
+            umount /mnt/data 
+            lvremove /dev/vg01/lv01 
+            vgremove vg01 
+            pvremove /dev/vdb2 /dev/vdb1 
+            pvdisplay /dev/vdb1 
+            pvdisplay /dev/vdb2
+            vgdisplay vg01
+            lvdisplay lv01
+            ## EXTEND LOGICAL VOLUMES 
+            parted -s /dev/vdb mkpart primary 1027MiB 1539MiB
+            parted -s /dev/vdb set 3 lvm on 
+            pvcreate /dev/vdb3 
+            vgextend vg01 /dev/vdb3 
+            vgdisplay vg01 
+            ## REDUCING LOGICAL VOLUMES 
+            pvmove /dev/vdb3
+            vgreduce vg01 /dev/vdb3
+            ## EXTEND LVM and XFS 
+            vgdisplay vg01 
+            lvextend -L +300M /dev/vg01/lv01 
+            lvextend -l 128  # resize logical volume to exactly 128 extents 
+            lvextend -l +128  # add 128 extents to logical volume
+            lvextend -L 128M  # resize logical volume to 128 MiB 
+            lvextend -L +128M # add 128 MiB to logical volume 
+            lvextend -l +50%FREE  # add 50% free space from volume group to logical volume 
+            xfs_growfs /mnt/data 
+            df -h /mnt/data 
+            ## EXTEND LVM and EXT4 
+            vgdisplay vg01 
+            lvextend -l {+extents} {/dev/vgname/lvname}
+            resize2fs /dev/vg01/lv01 
+            ## EXTEND LV and SWAP 
+            vgdisplay {vgname} 
+            swapoff -v {/dev/vgname/lvname}
+            lvextend -l {+extents} {/dev/vgname/lvname}
+            mkswap {/dev/vgname/lvname}
+            swapon -va {/dev/vgname/lvname}</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content></content>
+        </section> <!-- END: LVM -->
+
+        <section>STRATIS AND VIRTUAL DATA OPTIMIZER
+            <content-title>STRATIS</content-title>
+            <content>yum install stratis-cli stratisd 
+            systemctl endable --now stratisd 
+            stratis pool creat pool1 /dev/vdb  # each pool is subdir under /stratis
+            stratis pool list 
+            stratis pool add-data pool1 /dev/vdc 
+            stratis blockdev list pool1 
+            stratis filesystem create pool1 filesystem1 
+            stratis filesystem snapshow pool1 filesystem1 snapshot1 
+            stratis filesystem list 
+            lsblk --output=UUID /stratis/pool/filesystem1 
+            vim /etc/fstab  # UUID=31db...35cc /dir1 xfs defaults,x-systemd,requires=stratisd.service 0 0</content>
+            <content-title>VDO</content-title>
+            <content>yum instal vdo kmod-kvdo 
+            vdo create --name=vdo1 --device=/dev/vdd --vdoLogicalSize=50G 
+            vdo status --name=vd01 </content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content></content>
+            <content-title>FILE LOCATIONS</content-title>
+            <content></content>
+            <content-title>HYPERLINKS</content-title>
+            <content></content>
+        </section> <!-- STRATIS -->
+    </subject> <!-- END: ADVANCED STORAGE -->
+
+
+    <subject>13. SCHEDULING TASKS
+        <section>CRON
+            <content-title>COMMANDS</content-title>
+            <content></content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content></content>
+            <content-title>FILE LOCATIONS</content-title>
+            <content></content>
+            <content-title>HYPERLINKS</content-title>
+            <content></content>
+        </section>
+    </subject> <!-- END: SCHEDULE TASKS-->
+
+
+    <subject>14. NETWORK STORAGE
+        <section>
+            <content-title>COMMANDS</content-title>
+            <content>mkdir /nfstest 
+            mount serverb:/ /nfstest 
+            tree /nfstest/
+            umount /nfstest 
+            mount -t nfs -o rw,sync serverb:/shares/public /nfstest 
+            mount | grep nfstest 
+            vim /etc/fstab  # serverb:/shares/public /nfstest nfs rw,sync 0 0
+            mount -a
+            tree /nfstest 
+            ## NFS CONF 
+            vim /etc/nfs.conf  # use nfsconf to configure
+            sudo nfsconf --set nfsd {option} {value}
+            ## AUTO NFS - DIRECT MOUNT
+            ls -l /etc/auto.master.d 
+            yum install autofs
+            vim /etc/auto.master.d/demo.autofs  # /-  /etc/auto.demo
+            vim /etc/auto.demo  # /mnt/public  -rw,sync  serverb:/shares/direct  
+            mkdir /mnt/public 
+            systemctl enable --now autofs.service 
+            ## AUTO NFS - INDIRECT MOUNT 
+            vim /etc/auto.master.d/demo.autofs  # /shares  /etc/auto.demo
+            vim /etc/auto.demo  # class  -rw,sync  serverb:/shares/indirect/west
+            systemctl restart autofs.service 
+            ## AUTO NFS - INDIRECT WILDCARD 
+            vim /etc/auto.master.d/demo.autofs  # /shares  /etc/auto.demo
+            vim /etc/auto.demo  # * -rw,sync  serverb:/shares/indirect/&amp;
+            systemctl restart autofs.service+</content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content></content>
+            <content-title>FILE LOCATIONS</content-title>
+            <content></content>
+            <content-title>HYPERLINKS</content-title>
+            <content></content>
+        </section>
+    </subject> <!-- END: NETWORK STORAGE -->
+
+
+    <subject>15. NETWORK SECURITY
+        <section>
+            <content-title>COMMANDS</content-title>
+            <content></content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content></content>
+            <content-title>FILE LOCATIONS</content-title>
+            <content></content>
+            <content-title>HYPERLINKS</content-title>
+            <content></content>
+        </section>
+    </subject> <!-- END: NETWORK SECURITY -->
+
+
+
+
+
+
+    <subject>
+        <section>
+            <content-title>COMMANDS</content-title>
+            <content></content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content></content>
+            <content-title>FILE LOCATIONS</content-title>
+            <content></content>
+            <content-title>HYPERLINKS</content-title>
+            <content></content>
+        </section>
+    </subject>
+
+</root>
