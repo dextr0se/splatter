@@ -1,6 +1,6 @@
 # splatter
-XML to HTML Generator for Note/Code Snippet Quick Reference
-Splatter your code everywhere
+XML to HTML Note/Code Snippet Quick Reference Automagic Generator Python3 Script.<br />
+Splatter your code all up in the interwebs.<br />
 
 ## Summary
 Put code or other interesting things that you would like to organize for ease of copy splatting in an xml file with the tags specified below.  When you are finished entering your data into the xml file, execute the python script and walah... an HTML file with collapsible buttons is auto-generated.
