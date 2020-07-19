@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <root>RHEL 8 CMDS
     <subject>MISC
-		<section>GNOME SETTINGS LOCALE
-            <content-title>LANGUAGE SETTINGS</content-title>
+		<section>GNOME-SETTINGS-LOCALE
+            <content-title>LANGUAGE-SETTINGS</content-title>
 			<content>/etc/locale.conf  #SYSTEM-WIDE LOCALE SETTINGS
             /etc/vconsole.conf  #VIRTUAL CONSOLE SETTINGS tty
             gnome-control-center region
             LANG=fr_FR.utf8
             localectl
             localectl set-local LANG=fr_FR.utf8</content>
-            <content-title>LANGUAGE PACKS</content-title>
+            <content-title>LANGUAGE-PACKS</content-title>
             <content>yum list langpacks-*
             yum install langpacks-fr
             yum info langpacks-fr
@@ -17,11 +17,9 @@
             /usr/share/X11/xkb/rules/base.lst</content>
         </section> <!-- END: GNOME SETTINGS LOCALE -->
     </subject> <!-- END: MISC -->
-    
-
-    <subject>1. ACCESS AND SUPPORT
+    <subject>ACCESS-AND-SUPPORT
         <section>SSH
-            <content-title>COMMANDS</content-title>
+            <content-title>SSH-COMMANDS</content-title>
             <content>ssh remoteuser@remotehost\
             ssh-keygen
             ssh-keygen -f .ssh/mykey
@@ -35,12 +33,12 @@
             ssh-add .ssh/mykey-with-password
             ssh -i .ssh/mykey-with-password remoteuser@remotehost
             exit or Ctrl+D</content>
-            <content-title>SECURE SSHD</content-title>
+            <content-title>SECURE-SSHD</content-title>
             <content>sudo vim /etc/ssh/sshd_config
             PermitRootLogin no
             PasswordAuthentication no 
             sudo systemctl restart sshd</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>SSH-INFO-MAN-PAGES</content-title>
             <content>intro(1)
             bash(1)
             console(4)
@@ -50,22 +48,22 @@
             ssh-copy-id(1)
             ssh-agent(1)
             ssh-add(1)</content>
-            <content-title>FILE LOCATIONS</content-title>
+            <content-title>FILE-LOCATIONS</content-title>
             <content>~/.ssh/id_rsa (0600) &amp; ~/.ssh/id_rsa.pub (0644) #keygen default files</content>
-            <content-title>HYPERLINKS</content-title>
+            <content-title>SSH-HYPERLINKS</content-title>
             <content>https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/htmlsingle/
 securing_networks/assembly_using-secure-communications-with-opensshsecuring-
 networks</content>
         </section> <!-- END: SSH -->
 
-        <section>RED HAT SUPPORT
-            <content-title>Red Hat Customer Portal</content-title>
+        <section>REDHAT-SUPPORT
+            <content-title>REDHAT-CUSTOMER-PORTAL</content-title>
             <content>https://access.redhat.com</content>
-            <content-title>Red Hat Support Tool</content-title>
+            <content-title>REDHAT-SUPPORT-TOOL</content-title>
             <content>redhat-support-tool  #Enter support tool interpreter
             Command (? for help): search How to manage SSH keys
             redhat-support-tool kb 253273  #Access Knowledge Base Articles</content>
-            <content-title>Bug Reports</content-title>
+            <content-title>BUG-REPORTS</content-title>
             <content>1. Define the problem - clearly state problem and symptoms
             2. Gather background info - products/versions diagnostic info sosreport kdump
             3. Determine severity level - Low, Medium, High, Urgent - High &amp; Urgent contact support center
@@ -78,9 +76,9 @@ networks</content>
             redhat-support-tool modifycase --status=Closed 01034421
             kdump  #Attach kernel backtrace report
             Command (? for help):  analyze  #Log file analysis</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>RH-SUPPORT-INFO-MAN-PAGES</content-title>
             <content>sosreport(1)</content>
-            <content-title>HYPERLINKS</content-title>
+            <content-title>RH-SUPPORT-HYPERLINKS</content-title>
             <content>https://developer.redhat.com
             https://access.redhat.com/site/articles/445443
             https://access.redhat.com/site/videos/534293
@@ -88,19 +86,19 @@ networks</content>
             https://access.redhat.com/site/help/</content>
         </section> <!-- END: RED HAT SUPPORT -->
         
-        <section>RED HAT INSIGHTS
-            <content-title>COMMANDS</content-title>
+        <section>REDHAT-INSIGHTS
+            <content-title>RH-INSIGHTS-COMMANDS</content-title>
             <content>yum install insights-client
             insights-client --register  #Activate Red Hat Insights
             #verify system is visible at https://cloud.redhat.com/insights
             insights-client  #Update metadata
             subscription-manager register --auto-attach</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>RH-INSIGHTS-INFO-MAN-PAGES</content-title>
             <content>insights-client(8)
             insights-client.conf(5)</content>
-            <content-title>FILE LOCATIONS</content-title>
+            <content-title>RH-INSIGHTS-FILE-LOCATIONS</content-title>
             <content>/etc/insights-client.conf</content>
-            <content-title>HYPERLINKS</content-title>
+            <content-title>RH-INSIGHTS-HYPERLINKS</content-title>
             <content>https://cloud.redhat.com/insights
             https://access.redhat.com/products/red-hat-insights/#getstarted
             https://access.redhat.com/documentation/en-us/red_hat_insights/1.0/html-single/
@@ -111,9 +109,9 @@ release_notes/#release_information
     </subject> <!-- END: ACCESS & SUPPORT-->
     
 
-    <subject>2. FILE SYSTEM
-        <section>MANAGING FILES
-            <content-title>COMMANDS</content-title>
+    <subject>FILE-SYSTEM
+        <section>MANAGING-FILES
+            <content-title>MF-COMMANDS</content-title>
             <content>mkdir directory
             mkdir -p dirA/dir1 dirA/dir2 dirA/dir3/dirx
             cp file new-file
@@ -124,19 +122,19 @@ release_notes/#release_information
             rm -ri directory  #Interactively prompt for confirmation
             rmdir directory  #Empty directory
             rm -d directory  #Empty directory</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>MF-INFO-MAN-PAGES</content-title>
             <content>hier(7)
             cp(1)
             mkdir(1)
             mv(1)
             rm(1)
             rmdir(1)</content>
-            <content-title>HYPERLINKS</content-title>
+            <content-title>MF-HYPERLINKS</content-title>
             <content>https://fedoraproject.org/wiki/Features/UsrMove</content>
         </section> <!-- END: MANAGING FILES -->
         
         <section>LINKS
-            <content-title>HARD LINKS</content-title>
+            <content-title>HARD-LINKS</content-title>
             <content>ln existing-file new-hardlink-file
             ls -li *-file  #Inodes will be the same
             #Hard links points and name to data on a storage device
@@ -144,7 +142,7 @@ release_notes/#release_information
             #Hard links only work with regular files (no dirs or special files)
             #Hard links must be on the same file system
             df -h</content>
-            <content-title>SOFT-SYMBOLIC LINKS</content-title>
+            <content-title>SOFT-SYMBOLIC-LINKS</content-title>
             <content>ln -s existing-file new-symlink-file
             ls -li *-file  #Inodes will be different
             #Soft links point a name to another name that point to data on storage device
@@ -152,16 +150,16 @@ release_notes/#release_information
             #Can link files on different file systems
             #If regular file is deleted, soft link will be broke
             cd -P  #update name of actual directory is soft-link dir</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>LINKS-INFO-MAN-PAGES</content-title>
             <content>ln(1)
             info ln</content>
         </section> <!-- END: LINKS -->
     </subject> <!-- END: FILE SYSTEM -->
 
 
-    <subject>3. LOCAL USERS AND GROUPS
-        <section> USERS AND GROUPS
-            <content-title>COMMANDS</content-title>
+    <subject>LOCAL-USERS-AND-GROUPS
+        <section>USERS-GROUPS
+            <content-title>LUG-COMMANDS</content-title>
             <content>id
             id user01 user02
             ls -l file1
@@ -169,18 +167,18 @@ release_notes/#release_information
             ps -au  #view all processes (a) and user associated w/process (u)
             GECOS: comma-delimited, users full name, location, phone, contact info
             GECOS: General Electric Comprehensive Operating System</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>LUG-INFO-MAN-PAGES</content-title>
             <content>id(1)
             passwd(5)
             group(5)
             info libc - Section 30: Users and Groups</content>
-            <content-title>FILE LOCATIONS</content-title>
+            <content-title>LUG-FILE-LOCATIONS</content-title>
             <content>/etc/passwd
             /etc/group</content>
         </section> <!-- END: USERS AND GROUPS-->
 
-        <section>SUPERUSER ACCESS - SUDO
-            <content-title>COMMANDS</content-title>
+        <section>SUPERUSER-SUDO
+            <content-title>SUDO-COMMANDS</content-title>
             <content>su - user02
             su -  # '-' starts login shell with environ as new login user
             su    # starts non-login shell uses original user's environ
@@ -194,20 +192,20 @@ release_notes/#release_information
             # OLD:  Defaults      secure_path = /sbin:/bin:/usr/sbin:/usr/bin
             # NEW:  Defaults      secure_path = /usr/local/bin:/usr/bin
             #       Defaults>root secure_path = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>SUDO-INFO-MAN-PAGES</content-title>
             <content>info su
             su(1)
             sudo(8)
             visudo(8)
             sudoers(5)
             info libc persona - Section 30.2: The Persona of a Process</content>
-            <content-title>FILE LOCATIONS</content-title>
+            <content-title>SUDO-FILE-LOCATIONS</content-title>
             <content>/etc/sudoers
             /etc/sudoers.d</content>
         </section> <!-- END: SUPERUSER ACCESS - SUDO -->
         
-        <section>LOCAL USER ACCOUNTS
-            <content-title>COMMANDS</content-title>
+        <section>LOCAL-USER-ACCOUNTS
+            <content-title>LUA-COMMANDS</content-title>
             <content>useradd user01
             tail /etc/passwd
             usermod -c COMMENT -g PRI-GID -G LIST-SUPP-GROUPS -Ga APPEND-SUPP-GROUPS -d /home/dir -dm /move/home/dir -s SHELL -L -U
@@ -221,16 +219,16 @@ release_notes/#release_information
             #1000+ - regular users
             Prior RHEL7 - UID 1-499 system users/processes
             Prior RHEL7 - UID 500+ regular users</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>LUA-INFO-MAN-PAGES</content-title>
             <content>useradd(8)
             usermod(8)
             userdel(8)</content>
-            <content-title>FILE LOCATIONS</content-title>
+            <content-title>LUA-FILE-LOCATIONS</content-title>
             <content>/etc/login.defs</content>
         </section> <!-- LOCAL USER ACCOUNTS -->
 
-        <section>LOCAL GROUP ACCOUNTS
-            <content-title>COMMANDS</content-title>
+        <section>LOCAL-GROUP-ACCOUNTS
+            <content-title>LGA-COMMANDS</content-title>
             <content>sudo groupadd -g 10000 group01
             tail /etc/group
             sudo groupadd -r group02  #'-r' Create system group
@@ -241,17 +239,17 @@ release_notes/#release_information
             tail /etc/group
             sudo groupdel newgroup02  #cannot remove group if pri group of a user
             find / -nouser -o -nogroup  #Find all unowned files and dirs</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>LGA-INFO-MAN-PAGES</content-title>
             <content>group(5)
             groupadd(8)
             groupdel(8)
             usermod(8)</content>
-            <content-title>FILE LOCATIONS</content-title>
+            <content-title>LGA-FILE-LOCATIONS</content-title>
             <content>/etc/login.defs</content>
         </section><!-- LOCAL GROUP ACCOUNTS -->
         
-        <section>USER PASSWORDS
-            <content-title>COMMANDS</content-title>
+        <section>USER-PASSWORDS
+            <content-title>UP-COMMANDS</content-title>
             <content>chage user01  #Interactive Menu
             chage -m 0 -M 90 -W 7 -I 14 user02
             chage -d 0 user03  #Force user to change password on next login
@@ -269,24 +267,24 @@ release_notes/#release_information
             # -l list password aging details
             # COMPUTE EPOCH (1970JAN1) FROM CURRENT DATE
             echo $((`date --utc --date "$1" +%s`/86400))</content>
-            <content-title>RESTRICTING USER ACCESS</content-title>
+            <content-title>RESTRICTING-USER-ACCESS</content-title>
             <content>sudo usermod -L user03
             sudo usermod -L -e 2020-09-10 user03
             usermod -s /sbin/nologin user03</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>UP-INFO-MAN-PAGES</content-title>
             <content>chage(1)
             usermod(8)
             shadow(5)
             crypt(3)</content>
-            <content-title>FILE LOCATIONS</content-title>
+            <content-title>UP-FILE-LOCATIONS</content-title>
             <content>/etc/login.defs</content>
         </section> <!-- END: USER PASSWORDS -->
     </subject> <!-- END: LOCAL USERS AND GROUPS -->
 
 
-    <subject>4. FILE PERMISSIONS
-        <section>
-            <content-title>COMMANDS</content-title>
+    <subject>FILE-PERMISSIONS
+        <section>PERMISSIONS
+            <content-title>FP-COMMANDS</content-title>
             <content>#chmod WhoWhatWhich file|directory
             #Who - u, g, o, a
             #What - +, -, =
@@ -300,7 +298,7 @@ release_notes/#release_information
             chown user01:group01 somefile
             chown :group05 somefile
             chown -R root:root somedir</content>
-            <content-title>SPECIAL PERMISSIONS</content-title>
+            <content-title>SPECIAL-PERMISSIONS</content-title>
             <content>u+s (suid) #File: Executes as the user owner Dir: No effect
             g+s (sgid) #File: Executes as the group owner Dir: new files have group set to directory's group owner
             o+t (sticky) #File: No effect Dir: Users can only remove files that they own
@@ -320,7 +318,7 @@ release_notes/#release_information
             # Example SETGID BIT on directory
             chmod g+s directory
             chmod 2770 directory</content>
-            <content-title>DEFAULT FILE PERMISSIONS</content-title>
+            <content-title>DEFAULT-FILE-PERMISSIONS</content-title>
             <content>#default permissions for new directories 0777
             #default permissions for new files 0666
             #umask 0002 - removes the write permissions for all new files and dirs
@@ -335,7 +333,7 @@ release_notes/#release_information
             else
                 umask 022
             fi</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>FP-INFO-MAN-PAGES</content-title>
             <content>ls(1)
             chmod(1)
             chown(1)
@@ -343,7 +341,7 @@ release_notes/#release_information
             bash(1)
             ls(1)
             umask(1)</content>
-            <content-title>FILE LOCATIONS</content-title>
+            <content-title>FP-FILE-LOCATIONS</content-title>
             <content>/etc/profile  #system umask value
             /etc/bashrc  #system umask value
             ~/.bash_profile  #user override umask value
@@ -352,9 +350,9 @@ release_notes/#release_information
     </subject> <!-- END: FILE PERMISSIONS -->
 
 
-    <subject>5. SELINUX SECURITY
-        <section>SELINUX MODES
-            <content-title>COMMANDS</content-title>
+    <subject>SELINUX-SECURITY
+        <section>SELINUX-MODES
+            <content-title>SEL-COMMANDS</content-title>
             <content>ps axZ
             ps -ZC httpd
             ls -Z /home
@@ -368,17 +366,17 @@ release_notes/#release_information
             # enforcing=0    - permissive mode
             # enforcing=1    - enforcing mode
             # selinux=0      - disable</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>SEL-INFO-MAN-PAGES</content-title>
             <content>getenforce(8)
             setenforce(8)
             selinux_config(5)</content>
-            <content-title>FILE LOCATIONS</content-title>
+            <content-title>SEL-FILE-LOCATIONS</content-title>
             <content>/etc/selinux/config #RHEL 7/8
             /etc/sysconfig/selinux  #RHEL 6</content>
         </section> <!-- END: SELINUX MODES -->
 
-        <section>SELINUX FILE CONTEXTS AND BOOLEANS
-            <content-title>COMMANDS</content-title>
+        <section>SELINUX-FILE-CONTEXTS-AND-BOOLEANS
+            <content-title>CB-COMMANDS</content-title>
             <content>#Moving a File Keeps Original SELinux context
             #Copying a File inherits SELinux context from Destination directory
             ls -Zd
@@ -410,7 +408,7 @@ release_notes/#release_information
             sealert -a /var/log/audit/audit.log  # Reports on all incidents
             ausearch -m AVC -ts recent
             # Apply fix carefully from sealert - then run restorecon -Rv {directory}</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>CB-INFO-MAN-PAGES</content-title>
             <content>chcon(1)
             restorecon(8)
             semanage(8)
@@ -426,9 +424,9 @@ release_notes/#release_information
     </subject> <!-- END: SELINUX SECURITY -->
 
 
-    <subject>6. TUNING SYSTEM PERFORMANCE
+    <subject>TUNING-SYSTEM-PERFORMANCE
         <section>SIGNALS
-            <content-title>COMMANDS</content-title>
+            <content-title>TSP-COMMANDS</content-title>
             <content>Ctrl-z  # Suspend
             Ctrl-c  # kill
             Ctrl-\  # Core Dump
@@ -454,7 +452,7 @@ release_notes/#release_information
             pkill -P 8391
             pkill -SIGKILL -P 8391
             pgrep -l -u user01</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>TSP-INFO-MAN-PAGES</content-title>
             <content>info libc signal - Section 24: Singal Handling
             info libc processes - Section 26: Processes
             kill(1)
@@ -465,8 +463,8 @@ release_notes/#release_information
             signal(7)
             w(1)</content>
         </section> <!-- END: SIGNALS -->
-        <section>PROCESS ACTIVITY
-            <content-title>COMMANDS</content-title>
+        <section>PROCESS-ACTIVITY
+            <content-title>PA-COMMANDS</content-title>
             <content>uptime
             lscpu
             # TOP COMMAND
@@ -490,7 +488,7 @@ release_notes/#release_information
             # W - write current display configuration for next time top is used
             # q - quit
             # f - manage the columns</content>
-            <content-title>CALCULATE CPU LOAD</content-title>
+            <content-title>CALCULATE-CPU-LOAD</content-title>
             <content># From lscpu, the system has four logical CPUs, so divide by 4:
             # load average: 2.92, 4.48, 5.20
             # divide by number of logical CPUs:    4    4    4
@@ -502,15 +500,15 @@ release_notes/#release_information
             # With a load average of 2.92 on four CPUs, all CPUs were in use ~73% of the time.
             # During the last 5 minutes, the system was overloaded by ~12%.
             # During the last 15 minutes, the system was overloaded by ~30%.</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>PA-INFO-MAN-PAGES</content-title>
             <content>ps(1)
             top(1)
             uptime(1)
             w(1)</content>
         </section> <!-- END: PROCESS ACTIVITY -->
         
-        <section>ADJUSTING TUNING PROFILES
-            <content-title>COMMANDS</content-title>
+        <section>ADJUSTING-TUNING-PROFILES
+            <content-title>ATP-COMMANDS</content-title>
             <content>yum install tuned
             systemctl enable --now tuned
             # TUNED PROFILES
@@ -538,14 +536,14 @@ release_notes/#release_information
             tuned-adm recommend
             tuned-adm off
             tuned-adm active</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>ATP-INFO-MAN-PAGES</content-title>
             <content>tuned(8)
             tuned.conf(5)
             tuned-main.conf(5)
             tuned-adm(1)</content>
         </section> <!-- END: ADJUSTING TUNING PROFILES -->
-        <section>PROCESS SCHEDULING/PRIORITIZATION
-            <content-title>COMMANDS</content-title>
+        <section>PROCESS-SCHEDULING-PRIORITIZATION
+            <content-title>PSP-COMMANDS</content-title>
             <content># USE TOP TO DISPLAY NICE LEVELS
             # NI Column - Nice Value 
             # PR Column - Scheduled Priority
@@ -555,7 +553,7 @@ release_notes/#release_information
             nice -n 15 {command}  # Start a program/app with higher nice value
             renice -n 19 {PID}
             top  # renice with r followed by PID and new nice value</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>PSP-INFO-MAN-PAGES</content-title>
             <content>nice(1)
             renice(1)
             top(1)
@@ -564,9 +562,9 @@ release_notes/#release_information
     </subject> <!-- END: TUNING SYSTEM PERFORMANCE -->
 
 
-    <subject>7. PACKAGE MANAGER
-        <section>REDHAT SYSTEM REGISTRATION
-            <content-title>COMMANDS</content-title>
+    <subject>PACKAGE-MANAGER
+        <section>REDHAT-SYSTEM-REGISTRATION
+            <content-title>RSR-COMMANDS</content-title>
             <content># Activation keys allow registration without username password/automated deployments
             subscription-manager register --username=myusername --password=mypass
             subscription-manager list --available | less
@@ -574,19 +572,19 @@ release_notes/#release_information
             subscription-manager attach --pool=poolID
             subscription-manager list --consumed
             subscription-manager unregister</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>RSR-INFO-MAN-PAGES</content-title>
             <content>subscription-manager(8)
             rct(8)</content>
-            <content-title>FILE LOCATIONS</content-title>
+            <content-title>RSR-FILE-LOCATIONS</content-title>
             <content>/etc/pki/product  # cert w/RH products install on system
             /etc/pki/consumer  # cert w/RH account which system is registered
             /etc/pki/entitlement  # cert w/subscription attached to system</content>
-            <content-title>HYPERLINKS</content-title>
+            <content-title>RSR-HYPERLINKS</content-title>
             <content>https://access.redhat.com/site/articles/433903</content>
         </section> <!-- END: REDHAT SYSTEM REGISTRATION -->
         
         <section>YUM
-            <content-title>COMMANDS</content-title>
+            <content-title>YUM-COMMANDS</content-title>
             <content>yum help  # yellowdog update manager
             yum list 'http*'
             yum search {KEYWORD}  # searches name and summary only
@@ -619,7 +617,7 @@ release_notes/#release_information
             rpm --import http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
             yum install http://dl.fedoraproject.org/pub/epel/8/x86_64/e/epel-release-8-2.noarch.rpm
             cat /etc/yum.repos.d/epel.repo</content>
-            <content-title>PACKAGE MODULE STREAMS</content-title>
+            <content-title>PACKAGE-MODULE-STREAMS</content-title>
             <content>yum module list
             yum module list --installed
             yum module list {module_name}
@@ -635,11 +633,11 @@ release_notes/#release_information
             yum module disable {module_disable}
             yum module reset {module_name}
             yum distro-sync</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>YUM-INFO-MAN-PAGES</content-title>
             <content>yum(1)
             yum.conf(5)
             yum-config-manager(1)</content>
-            <content-title>HYPERLINKS</content-title>
+            <content-title>YUM-HYPERLINKS</content-title>
             <content>https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/
 html-single/configuring_basic_system_settings/installing-software-with-yum_
 configuring-basic-system-settings
@@ -650,9 +648,9 @@ installing_managing_and_removing_user_space_components/
     </subject> <!-- END: PACKAGE MANAGER -->
 
 
-    <subject>8. BASIC STORAGE
-        <section>MOUNTING FS
-            <content-title>COMMANDS</content-title>
+    <subject>BASIC-STORAGE
+        <section>MOUNTING-FS
+            <content-title>STOR-COMMANDS</content-title>
             <content>## MANUAL FS MOUNTING
             lsblk
             mount /dev/vdb1 /mnt/data  # mount by device
@@ -666,15 +664,15 @@ installing_managing_and_removing_user_space_components/
             ## UNMOUNTING FS
             lsof /mnt/data
             umount /mnt/data</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>STOR-INFO-MAN-PAGES</content-title>
             <content>lsblk(8)
             mount(8)
             umount(8)
             lsof(8)</content>
         </section> <!-- END: MOUNTING FS -->
 
-        <section>PARTITIONS/FS/PERSISTENT MOUNTS
-            <content-title>COMMANDS</content-title>
+        <section>PARTITIONS-FS-PERSISTENT-MOUNTS
+            <content-title>MNT-COMMANDS</content-title>
             <content>parted /dev/vda print
             parted /dev/vda
             parted /dev/vda unit {display_size} print 
@@ -723,7 +721,7 @@ installing_managing_and_removing_user_space_components/
             mount -a | mount /{mount_dir}  # verify fstab is correct
             findmnt --verify  # verify fstab is correct
             systemctl daemon-reload</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>MNT-INFO-MAN-PAGES</content-title>
             <content>parted(8)
             mkfs(8)
             mount(8)
@@ -731,8 +729,8 @@ installing_managing_and_removing_user_space_components/
             fstab(5)</content>
         </section> <!-- PARTITIONS/FS/PERSISTENT MOUNTS -->
 
-        <section>SWAP SPACE
-            <content-title>COMMANDS</content-title>
+        <section>SWAP-SPACE
+            <content-title>SWAP-COMMANDS</content-title>
             <content>## CREATE SWAP PARTITION
             parted /dev/vdb print
             parted /dev/vdb mkpart swap1 linux-swap 1001MB 1257MB
@@ -752,7 +750,7 @@ installing_managing_and_removing_user_space_components/
             # 4th column is priority - defaults = -2
             # set priority - pri=10 | pri=4 
             # the higher number gets priority </content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>SWAP-INFO-MAN-PAGES</content-title>
             <content>mkswap(8)
             swapon(8)
             swapoff(8)
@@ -762,9 +760,9 @@ installing_managing_and_removing_user_space_components/
     </subject> <!-- END: BASIC STORAGE -->
 
 
-    <subject>9. SERVICES &amp; BOOT
-        <section>SYSTEMD SERVICES
-            <content-title>COMMANDS</content-title>
+    <subject>SERVICES-BOOT
+        <section>SYSTEMD-SERVICES
+            <content-title>SYSD-COMMANDS</content-title>
             <content>systemctl list-unit --type=service  # only loaded/active services
             systemctl list-unit --type=service --all  # displays all loaded services
             systemctl  # displays everything loaded/active
@@ -790,7 +788,7 @@ installing_managing_and_removing_user_space_components/
             # enabling services
             systemctl enable {name.type}  # creates syn-link /usr/lib/systemd/system
             systemctl disable {name.type}</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>SYSD-INFO-MAN-PAGES</content-title>
             <content>systemd(1)
             systemd.unit(5)
             systemd.service(5)
@@ -798,8 +796,8 @@ installing_managing_and_removing_user_space_components/
             systemctl(1)</content>
         </section> <!-- END: SYSTEMD SERVICES -->
 
-        <section>TSHOOT BOOT ISSUES
-            <content-title>COMMANDS</content-title>
+        <section>TSHOOT-BOOT-ISSUES
+            <content-title>TSHOOT-COMMANDS</content-title>
             <content>systemctl poweroff | poweroff
             systemctl reboot | reboot
             systemctl halt | halt
@@ -839,7 +837,7 @@ installing_managing_and_removing_user_space_components/
             ## EMERGENCY SHELL
             vim /etc/fstab
             systemctl daemon-relead</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>TSHOOT-INFO-MAN-PAGES</content-title>
             <content>bootup(7)
             dracut.bootup(7)
             dracut.cmdline(7)
@@ -858,9 +856,9 @@ installing_managing_and_removing_user_space_components/
     </subject> <!-- END: SERVICES & BOOT -->
 
 
-    <subject>10. NETWORKING
-        <section>VIEWING/MODIFYING NETWORK SETTINGS
-            <content-title>COMMANDS</content-title>
+    <subject>NETWORKING
+        <section>VIEWING-MODIFYING-NETWORK-SETTINGS
+            <content-title>NET-COMMANDS</content-title>
             <content>ip link show
             ip addr show {interface_name}
             ip -s link show {interface_name}  # display link details
@@ -940,7 +938,7 @@ installing_managing_and_removing_user_space_components/
             host {IP_ADDR}  # test reverse lookup
             # DHCP will auto overwrite /etc/resolv.conf unless overriden with PEERDNS=no 
             nmcli con mod "{name}" ipv4.ignore-auto-dns yes</content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>NET-INFO-MAN-PAGES</content-title>
             <content>ip-link(8)
             ip-address(8)
             ip-route(8)
@@ -965,9 +963,9 @@ installing_managing_and_removing_user_space_components/
     </subject> <!-- END: NETWORKING -->
 
 
-    <subject>11. LOGS
-        <section>JOURNALD AND TIMEDATE
-            <content-title>COMMANDS</content-title>
+    <subject>LOGS
+        <section>JOURNALD-TIMEDATE
+            <content-title>JRNL-COMMANDS</content-title>
             <content>logger -p local7.notice "Log entry created by logger"
             # /etc/logrotate.conf
             # man rsyslog.conf defines facility.priority 
@@ -997,7 +995,7 @@ installing_managing_and_removing_user_space_components/
             vim /etc/chrony.conf  # NTP servers 
             systemctl restart chronyd 
             chronyc sources -v </content>
-            <content-title>INFO-MAN PAGES</content-title>
+            <content-title>JRNL-INFO-MAN-PAGES</content-title>
             <content>logger(1)
             rsyslog.conf(5)
             # rsyslog manual - /usr/share/doc/rsyslog/html/index.html
@@ -1009,9 +1007,9 @@ installing_managing_and_removing_user_space_components/
     </subject> <!-- END: LOGS -->
 
 
-    <subject>12. ADVANCED STORAGE
+    <subject>ADVANCED-STORAGE
         <section>LVM
-            <content-title>COMMANDS</content-title>
+            <content-title>LVM-COMMANDS</content-title>
             <content>## CREATE LOGICAL VOLUME
             parted /dev/vdb mklabel msdos
             parted -s /dev/vdb mkpart primary 1MiB 769MiB
@@ -1067,11 +1065,9 @@ installing_managing_and_removing_user_space_components/
             lvextend -l {+extents} {/dev/vgname/lvname}
             mkswap {/dev/vgname/lvname}
             swapon -va {/dev/vgname/lvname}</content>
-            <content-title>INFO-MAN PAGES</content-title>
-            <content></content>
         </section> <!-- END: LVM -->
 
-        <section>STRATIS AND VIRTUAL DATA OPTIMIZER
+        <section>STRATIS-&amp;-VIRTUAL-DATA-OPTIMIZER
             <content-title>STRATIS</content-title>
             <content>yum install stratis-cli stratisd 
             systemctl endable --now stratisd 
@@ -1088,16 +1084,10 @@ installing_managing_and_removing_user_space_components/
             <content>yum instal vdo kmod-kvdo 
             vdo create --name=vdo1 --device=/dev/vdd --vdoLogicalSize=50G 
             vdo status --name=vd01 </content>
-            <content-title>INFO-MAN PAGES</content-title>
-            <content></content>
-            <content-title>FILE LOCATIONS</content-title>
-            <content></content>
-            <content-title>HYPERLINKS</content-title>
-            <content></content>
         </section> <!-- STRATIS -->
     </subject> <!-- END: ADVANCED STORAGE -->
 
-
+<!--
     <subject>13. SCHEDULING TASKS
         <section>CRON
             <content-title>COMMANDS</content-title>
@@ -1109,12 +1099,11 @@ installing_managing_and_removing_user_space_components/
             <content-title>HYPERLINKS</content-title>
             <content></content>
         </section>
-    </subject> <!-- END: SCHEDULE TASKS-->
+    </subject> --> <!-- END: SCHEDULE TASKS-->
 
-
-    <subject>14. NETWORK STORAGE
-        <section>
-            <content-title>COMMANDS</content-title>
+    <subject>NETWORK-STORAGE
+        <section>NETWORK-FILE-STORAGE
+            <content-title>NFS-COMMANDS</content-title>
             <content>mkdir /nfstest 
             mount serverb:/ /nfstest 
             tree /nfstest/
@@ -1142,16 +1131,10 @@ installing_managing_and_removing_user_space_components/
             vim /etc/auto.master.d/demo.autofs  # /shares  /etc/auto.demo
             vim /etc/auto.demo  # * -rw,sync  serverb:/shares/indirect/&amp;
             systemctl restart autofs.service+</content>
-            <content-title>INFO-MAN PAGES</content-title>
-            <content></content>
-            <content-title>FILE LOCATIONS</content-title>
-            <content></content>
-            <content-title>HYPERLINKS</content-title>
-            <content></content>
         </section>
     </subject> <!-- END: NETWORK STORAGE -->
 
-
+<!--
     <subject>15. NETWORK SECURITY
         <section>
             <content-title>COMMANDS</content-title>
@@ -1163,13 +1146,13 @@ installing_managing_and_removing_user_space_components/
             <content-title>HYPERLINKS</content-title>
             <content></content>
         </section>
-    </subject> <!-- END: NETWORK SECURITY -->
+    </subject> --> <!-- END: NETWORK SECURITY -->
 
 
 
 
 
-
+<!--
     <subject>
         <section>
             <content-title>COMMANDS</content-title>
@@ -1182,5 +1165,5 @@ installing_managing_and_removing_user_space_components/
             <content></content>
         </section>
     </subject>
-
+-->
 </root>
