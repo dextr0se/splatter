@@ -12,9 +12,9 @@ The xml has 5 tags:<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``<content-title>`` Collapsible title button in main window``</content-title``<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``<content>`` Text that will be placed into a small code box.<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Any line that begins with a # will be a different color (like a comment)``</content>``<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</section>``
-&nbsp;&nbsp;&nbsp;&nbsp;``</subject>``
-&nbsp;&nbsp;``<\root>``
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``</section>``<br />
+&nbsp;&nbsp;&nbsp;&nbsp;``</subject>``<br />
+&nbsp;&nbsp;``<\root>``<br />
 
 ## Dependencies
 The CSS, JS, XML and FILES directories must be in the same directory as the splatter.html generated file.
