@@ -60,7 +60,7 @@ for subject in root:
                                  + ' type="button"' + \
                                  ' data-target="#' + content_title + '">' + content_title + \
                                  '</button><br>\n' + '\t\t'
-            if content.tag == "content":
+            if content.text and content.tag == "content":
                 content_lines = content.text.split('\n')
                 html_document += '\t\t<div class="panel-collapse collapse in w3-code w3-black" id="' + content_title + '">\n'
 
