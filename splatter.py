@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# splatter.py - python3 script that takes xml notes and auto-builds HTML page for quick reference and copy-splat
 import xml.etree.ElementTree as et
 tree = et.parse('xml/references.xml')
 root = tree.getroot()
@@ -6,14 +8,14 @@ root = tree.getroot()
 def generateMenu(mbr_root):
     mbr_html_document = ''
     for mbr_menu_item in mbr_root:
-        mbr_html_document += '\t<li>\n\t\t<a href="#' + mbr_menu_item.text.encode('utf-8').strip(' \n\t') + \
+        mbr_html_document += '\t<li>\n\t\t<a href="#' + mbr_menu_item.text.strip(' \n\t') + \
                              '" data-toggle="collapse" aria-expanded="false">' + \
-                             mbr_menu_item.text.encode('utf-8').strip(' \n\t') + '</a>\n'
+                             mbr_menu_item.text.strip(' \n\t') + '</a>\n'
         mbr_html_document += '\t\t<ul class="collapse list-unstyled" id="' +  \
-                             mbr_menu_item.text.encode('utf-8').strip(' \n\t') + '">\n'
+                             mbr_menu_item.text.strip(' \n\t') + '">\n'
         for mbr_submenu_item in mbr_menu_item:
-            mbr_html_document += '\t\t\t<li> <a href="#' + mbr_submenu_item.text.encode('utf-8').strip(' \n\t') + \
-                                 '">' + mbr_submenu_item.text.encode('utf-8').strip(' \n\t') + '</a></li>\n'
+            mbr_html_document += '\t\t\t<li> <a href="#' + mbr_submenu_item.text.strip(' \n\t') + \
+                                 '">' + mbr_submenu_item.text.strip(' \n\t') + '</a></li>\n'
         mbr_html_document += '\t\t</ul>\n\t</li>\n'
     mbr_html_document += '''</ul>
 </nav>
@@ -27,7 +29,7 @@ try:
     html_document = headFile.read()
     headFile.close()
 except Exception as e:
-    print e
+    print(e)
 
 
 # Create Menu
@@ -36,22 +38,22 @@ html_document += generateMenu(root)
 
 # Loop through each Subject
 for subject in root:
-    subject_name = subject.text.encode('utf-8').strip(' \n\t')
-    print '(+) Starting XML Parse on subject: ' + subject_name
+    subject_name = subject.text.strip(' \n\t')
+    print('(+) Starting XML Parse on subject: ' + subject_name)
     total_sections = len(subject.findall('section'))
-    print '\t(+) FOUND ' + str(total_sections) + ' SECTIONS WITHIN THE ' + subject_name + ' SUBJECT'
+    print('\t(+) FOUND ' + str(total_sections) + ' SECTIONS WITHIN THE ' + subject_name + ' SUBJECT')
 
     html_document += '<div class="panel-group" id="accordion">'
     # START ITERATE/PARSING SECTIONS
     section_counter = 1
     for section in subject:
-        section_name = section.text.encode('utf-8').strip(' \n\t')
+        section_name = section.text.strip(' \n\t')
 
         # START ITERATE/PARSING CONTENT WITHIN SECTION
         html_document += '\t<div id="' + section_name + '" class="alert alert-info" role="alert"><center><h4>' + section_name + '</h4></center>\n'
         for content in section:
             if content.tag == "content-title":
-                content_title = content.text.encode('utf-8').strip('\n\t')
+                content_title = content.text.strip('\n\t')
 
                 # ADD COLLAPSIBLE CONTENT WITH CONTENT TILE AS BUTTON TEXT
                 html_document += '\t\t<button class="accordion-toggle btn btn-danger btn-block" data-toggle="collapse" data-parent="#accordion"' \
@@ -64,11 +66,11 @@ for subject in root:
 
                 # ITERATE THROUGH EACH LINE IN CONTENT
                 for content_line in content_lines:
-                    content_line = content_line.encode('utf-8').strip(' \t')
+                    content_line = content_line.strip(' \t')
                     # CLEAR ANY BLANK LINES
                     if len(content_line.strip()) == 0:
                         content_line = ''
-                        print '(*) - FOUND BLANK CONTENT LINE - CHECK XML AT ' + content_title
+                        print('(*) - FOUND BLANK CONTENT LINE - CHECK XML AT ' + content_title)
                     # IF FIRST CHAR IN LINE IS A # - CHANGE FONT COLOR FOR LINE
                     if content_line[:1] == "#":
                         html_document += '\t\t\t<font color ="blue">' + content_line + '</font><br>\n'
@@ -143,7 +145,7 @@ try:
     htmlFile = open("splatter.html", "w")
     htmlFile.write(html_document)
     htmlFile.close()
-    print '(+) HTML FILE GENERATED'
+    print('(+) HTML FILE GENERATED')
 except Exception as e:
-    print '(-) FILE ERROR: ' + e
+    print('(-) FILE ERROR: ' + e)
 
