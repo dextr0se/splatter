@@ -1,0 +1,1283 @@
+<?xml version="1.0"?>
+<root>RHEL8-RHCE-ANSIBLE-REFERENCE
+
+    <subject>INTRO-ANSIBLE
+        <section>INTRO-INSTALL
+            <content-title>INSTALLING-ANSIBLE</content-title>
+            <content># Dependency: Python >=3.5 or Python 2.7
+            yum list install platform-python
+            # RHEL8 channel - ansible-2.8-for-rhel-9-x86_64-rpms 
+            # Major release channel - ansible2-for-rhel-8-x86_64-rpms 
+            ## Red Hat Ansible Engine Subscription Install
+            subscription-manager register 
+            subscription-manager role --set="Red Hat Enterprise Linux Server"
+            subscription-manager list --available 
+            subscription-manager attach --pool={engine-subcription-pool}
+            subscription-manager repos --enable ansible-2-for-rhel-8-x86_64-rpms 
+            yum install ansible 
+            ## Red Hat Ansible Limited Support
+            subscription-manager refresh 
+            subscription-manager repos --enable ansible
+            yum install ansible 
+            ansible -m setup localhost  # view settings 
+            ansible -m setup localhost | grep ansible_python_version
+            ## LINUX HOSTS
+            yum list install python3-libselinux  #libselinux-python package RHEL7
+            yum module install python36
+            ## WINDOWS HOSTS
+            # Requires PowerShell &gt;=3.0 &amp;&amp; .NET Framework &gt;=4.0</content>
+            <content-title>ANSIBLE-HYPERLINKS</content-title>
+            <content>Ansible: https://www.ansible.com
+            How Ansible Works: https://www.ansible.com/how-ansible-works
+            Knowledgebase article How Do I Download and Install Red Hat Ansible Engine? https://access.redhat.com/articles/3174981
+            Ansible Lifecycle: https://access.redhat.com/support/policy/updates/ansible-engine
+            Windows Modules: https://docs.ansible.com/ansible/latest/modules/list_of_windows_modules.html
+            Ansible for Network Automation: https://docs.ansible.com/ansible/latest/network/index.html
+            Ansible for Network Automation Course: https://www.redhat.com/en/services/training/do457-ansible-network-automation
+            Top Support Policies for Red Hat Ansible Automation: https://access.redhat.com/ansible-top-support-policies
+            Installation Guide - Ansible Documentation: http://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
+            Windows Guides - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/windows.html</content>
+        </section>
+    </subject> <!-- END: INTRO-ANSIBLE -->
+
+
+    <subject>DEPLOY-ANSIBLE
+        <section>INVENTORY
+            <content-title>STATIC-INVENTORY</content-title>
+            <content># Hosts/Groups are managed from a file
+            ## INI-Style static inventory file - list of ip/hostnames 
+            # /etc/ansible/hosts
+            # custom inventory file location - add --inventory PATH or -i PATH
+            [webservers]
+            web1.lab.net
+            web2.lab.net
+            192.0.2.34
+            
+            [db-servers]
+            db1.lab.net
+            db2.lab.net
+            ## Nested Groups 
+            [usa]
+            washington1.lab.net 
+            washington2.lab.net 
+            
+            [canada]
+            ontario01.lab.net 
+            ontario02.lab.net 
+            
+            [north-america:children]
+            usa
+            canada
+            ## RANGES
+            [usa]
+            washington[1:2].lab.net
+            
+            [canada]
+            ontario[01:02].lab.net
+            ## Verify Inventory 
+            ansible hostname.lab.net --list-hosts 
+            ansible canada --list-hosts
+            ansible-inventory --graph -i inventory
+            ansible-inventory --yaml -i inventory --list</content>
+            <content-title>DYNAMIC-INVENTORY</content-title>
+            <content># Can be linked to Databases on RH Satellite server or Amazon EC2 account, etc..</content>
+            <content-title>INVENTORY-HYPERLINKS</content-title>
+            <content>Inventory: Ansible Documentation: http://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html</content>
+        </section>
+        <section>ANSIBLE-CONFIG-FILES
+            <content-title>CONFIG-ANSIBLE</content-title>
+            <content>## Basic Configuration File /etc/ansible/ansible.cfg
+            # ~/.ansible.cfg will override /etc/ansible/ansible.cfg 
+            # ./ansible.cfg in pwd when running ansible cmds will override ~/.ansible.cfg
+            # best practice: execute all ansible commands from a directory that contains .cfg file and all other supporting files
+            vim /etc/ansible/ansible.cfg
+            ## ANSIBLE_CONFIG environ variable - overrides all other config file locations
+            # displays config file being utilized
+            ansible --version  
+            ansible servers --list-hosts -v  
+            ## CONFIG FILE SECTIONS/DIRECTIVES 
+            [defaults]
+            inventory = {path/to/inventory_file} # Specifies path to inventory file 
+            remote_user = {username} # Managed hosts username - will use current user if none supplied 
+            ask_pass = {true|false} # Prompt for SSH password - False if using SSH public key authentication 
+            [privilege_escalation]
+            become = {true|false}  # auto switch to different user once connected (ie. root)
+            become_method = {sudo|su} # How to switch to different user
+            become_user = {username} # The username switching to (ie. root)
+            become_ask_pass = {true|false} # prompt for password ofr become_method (default False)
+            ## password-less sudo for Ansible user /etc/sudoers 
+            vim /etc/sudoers.d/ansible.sudo 
+            ansibleuser  ALL=(ALL) NOPASSWD:ALL  # Poses security implications</content>
+            <content-title>SSH-PUBLICKEY-DEPLOY-PLAY</content-title>
+            <content># Ansible Playbook to deploy public key to remote_user account
+            ---
+            - name: Public key is deployed managed hosts for Ansible 
+              hosts: all
+              
+              tasks:
+                - name: Ensure key is in root's ~/.ssh/authorized_hosts 
+                  authorized_key:
+                    user: root
+                    state: present 
+                    key: '{{ item }}'
+                  with_file:
+                    - ~/.ssh.id_rsa.pub</content>
+            <content-title>CONFIG-MAN-INFO-PAGES</content-title>
+            <content>ansible(1)
+            ansible-config(1)</content>
+            <content-title>CONFIG-HYPERLINKS</content-title>
+            <content>Configuration file: Ansible Documentation: https://docs.ansible.com/ansible/latest/installation_guide/intro_configuration.html</content>
+        </section>
+        <section>ADHOC-CMDS
+            <content-title>ADHOC-COMMANDS</content-title>
+            <content>ansible {host-pattern} -m {module} [-a '{module_arguments}'] [-i {inventory.file}]
+            # host-pattern - specifies managed host(s) to execute command against
+            # module - small programatic task
+            # module_arguments - options arguments for module 
+            # inventory.file - path to the inventory file 
+            ansible all -m ping 
+            ansible-doc -l  # list all ansible modules installed 
+            ansible-doc {module}  # views documentation on specific module
+            ansible-doc -s {module}  # view summary on specific module 
+            ## COMMON MODULES
+            # FILES MODULES: copy, file, lineinfile, synchronize 
+            # SOFTWARE PKG MODULES: package, yum, apt, dnf, gem, pip 
+            # SYSTEM MODULES: firewalld, reboot, service, user 
+            # NET TOOLS MODULES: get_url, nmcli, uri 
+            ## EXAMPLES
+            ansible -m user -a 'name=newbie uid=4000 state=present' servera.lab.net 
+            ansible mymanagedhosts -m command -a /usr/bin/hostname 
+            ansible mymanagedhosts -m command -a /usr/bin/hostname -o  # output on one line 
+            # If no -m is specified; command module is used by default
+            ansible localhost -m shell -a set  # when cmd requires shell processing 
+            ansible {remote_host} -m raw  # raw is used to bypass module subsystem - ie. network routers
+            # Best practice - don't use command,shell,raw; use the ansible modules 
+            ## ansible command-line options 
+            # -i  inventory
+            # -u  remote_user
+            # -b | --become 
+            # --become-method 
+            # --become-user 
+            # -K | --ask-become-pass
+            # ansible --help </content>
+            <content-title>ADHOC-HYPERLINKS</content-title>
+            <content>Working with Patterns: Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html
+            Introduction to Ad-Hoc Commands: Ansible Documentation: http://docs.ansible.com/ansible/latest/user_guide/intro_adhoc.html
+            Module Index: Ansible Documentation: http://docs.ansible.com/ansible/latest/modules/modules_by_category
+            command - Executes a command on a remote node: Ansible Documentation: http://docs.ansible.com/ansible/latest/modules/command_module.html
+            shell - Execute commands in nodes: Ansible Documentation: http://docs.ansible.com/ansible/latest/modules/shell_module.html</content>
+        </section>
+    </subject>
+
+
+    <subject>PLAYBOOKS
+        <section>WRITING-RUNNING-PLAYS
+            <content-title>PLAY-FORMAT</content-title>
+            <content>ansible -m user -a "name=newbie uid=4000 state=present' servera.lab.net 
+            ---
+            - name: Configure important user consistently 
+              hosts: servera.lab.net 
+              tasks:
+                - name: newbie exists with UID 4000 
+                  user:
+                    name: newbie 
+                    uid: 4000 
+                    state: present
+            # Use only the space char for indentation, no tab 
+            # vim ~/.vimrc
+            # autocmd FileType yaml setlocal ai ts=2 sw=2 et
+            # Runs tasks in sequential order
+            tasks:
+              - name: webserver is enabled 
+                service:
+                  name: httpd 
+                  enabled: true 
+              - name: NTP is enabled 
+                service:
+                  name: chronyd 
+                  enabled: true 
+              - name: Postfix is enabled 
+                service:
+                  name: postfix 
+                  enabled: true 
+            ## RUNNING A PLAY 
+            ansible-playbook -v|vv|vvv|vvvv {playbook.yml}
+            ansible-playbook --syntax-check {playbook.yml}  # veryify yml syntax
+            ansible-playbook -C {playbook.yml}  # dry-run; no changes will take effect</content>
+            <content-title>PLAYBOOK-REFERENCES</content-title>
+            <content>ansible-playbook(1)
+            Intro to Playbooks - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_intro.html
+            Playbooks - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks.html
+            Check Mode ("Dry Run") - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_checkmode.html</content>
+        </section>
+        <section>MULTIPLE-PLAYS
+            <content-title>MULTIPLE-PLAYS-FORMAT</content-title>
+            <content>---
+            # This is a simple playbook with two plays
+            - name: first play
+              hosts: web.example.com
+              remote_user: automation
+              become: yes
+
+              tasks:
+                - name: first task
+                  yum:
+                    name: httpd
+                    status: present
+                - name: second task
+                  service:
+                    name: httpd
+                    enabled: true
+            - name: second play
+              hosts: database.example.com
+              tasks:
+                - name: first task
+                  service:
+                    name: mariadb
+                    enabled: true
+            ## PRIV_ESC EXAMPLE 
+            - name: /etc/hosts is up to date
+              hosts: datacenter-west
+              remote_user: automation
+              become: yes
+              tasks:
+                - name: server.example.com in /etc/hosts
+                  lineinfile:
+                    path: /etc/hosts
+                    line: '192.0.2.42 server.example.com server'
+                    state: present
+            ## RESOLV.CONF EXAMPLE
+            -name: Idempotent approach with copy module 
+              copy:
+                dest: /etc/resolv.conf 
+                content: "nameserver 1.1.1.1\n"
+            ## CUSTOM ANSIBLE MODULE 
+            # environ variable ANSIBLE_LIBRARY 
+            # library = /usr/share/my_module - keyword in ansible configuration file 
+            # ansible also looks in the ./library directory for modules also 
+
+            </content>
+            <content-title>MULTIPLE-PLAYS-REFERENCES</content-title>
+            <content>ansible-playbook(1)
+            ansible-doc(1)
+            Intro to Playbooks - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_intro.html
+            Playbooks - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks.html
+            Developing Modules - Ansible Documentation: https://docs.ansible.com/ansible/latest/dev_guide/developing_modules.html
+            YAML Syntax - Ansible Documentation: https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
+            Custom Modules: https://docs.ansible.com/ansible/latest/dev_guide/developing_modules.html</content>
+        </section>
+    </subject>
+
+
+    <subject>VARIABLES-FACTS
+        <section>VARIABLES
+            <content-title>VAR-EXAMPLES</content-title>
+            <content># Variables defined: Global (cmd-line or ansible.cfg), Play (in playbook file), Host (groups or individual hosts)
+            # Host are overridden by Play which are overridden by Global
+            ## BASIC VAR EXAMPLE
+            vars:
+              user: joe 
+            tasks:
+              - name: Creates the user {{ user }}
+                user:
+                  name: "{{ user }}"
+            # Always quote brackets with used to start a value 
+            ## HOST/GROUP VARIABLES IN INVENTORY 
+            # host example
+            [servers]
+            demo.lab.net  ansible_user=auser 
+            # group example
+            [servers]
+            srvr1.lab.net 
+            srvr2.lab.net 
+            
+            [servers:vars]
+            user=auser
+            # another example
+            [srvrs_north]
+            nsrvr1.lab.net 
+            nsrvr2.lab.net 
+
+            [srvrs_south]
+            ssrvr1.lab.net
+            ssrvr2.lab.net 
+
+            [srvrs:children]
+            srvrs_north 
+            srvrs_south
+
+            [srvrs:vars]
+            user=auser
+            ## PREFERED METHOD - MKDIR IN SAME WORKING DIR AS INVENTORY 
+            mkdir ./group_vars
+            vim ./group_vars  # user: auser
+            mkdir ./host_vars
+            vim ./host_vars/nsrvr1.lab.net  # user: auser 
+            ## OVERRIDE ALL VARIABLES FROM CMD-LINE 
+            ansible-playbook {playbook.yml} -e "{somevar=somevalue}"
+            ansible-playbook main.yml -e "package=apache"
+            ## VARIABLE ARRAYS
+            users:
+              bjones:
+                first_name: Jon
+                last_name: Joseph 
+                home_dir: /users/jjoseph
+              acook:
+                first_name: Mary
+                last_name: Beth
+                home_dir: /users/mbeth
+            # return first name 
+            users.jjoseph.first_name
+            users.['jjoseph']['first_name']
+            ## CAPTURE STDOUT FROM COMMAND WITH DEBUG MODULE
+            ---
+            - name: Installs a package and prints the result
+              hosts: all
+              tasks:
+                - name: Install the package
+                  yum:
+                    name: httpd
+                    state: installed
+                  register: install_result
+
+                - debug: var=install_result</content>
+            <content-title>VARIABLES-REFERENCES</content-title>
+            <content>Inventory - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html
+            Variables - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html
+            Variable Precedence: Where Should I Put A Variable?: https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable
+            YAML Syntax - Ansible Documentation: https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html</content>
+        </section>
+        <section>SECRETS
+            <content-title>ANSIBLE-VAULT</content-title>
+            <content>ansible-vault create {encrypted.yml}  # AES-256 encrypted
+            ansible-vault view {encrypted.yml}
+            ansible-vault edit {encrypted.yml}
+            ansible-vault encrypt {playbook1.yml} {playbook2.yml} {...}
+            ansible-vault encrypt --vault-id {one} {playbook.yml}  # multiple passwords
+            ansible-vault decrypt {playbook.yum} --output={playbook-decrypted.yml}
+            ansible-vault rekey {playbook.yum}</content>
+            <content-title>PLAYBOOKS-VAULT</content-title>
+            <content>ansible-playbook --vault-id @prompt {playbook.yml}  # ver lt 2.4 --ask-vault-pass
+            ansible-playbook --vault-password-file=vault-pw-file {playbook.yml}
+            # environ var ANSIBLE_VAULT_PASSWORD_FILE
+            ansible-playbook --vault-id {one}@prompt --vault-id {two}@prompt {playbook.yml}</content>
+            <content-title>BEST-PRACTICE-VARIABLE-MANAGEMENT</content-title>
+            <content>.
+            ├── ansible.cfg
+            ├── group_vars
+            │ └── webservers
+            │ └── vars
+            ├── host_vars
+            │ └── demo.example.com
+            │ ├── vars
+            │ └── vault
+            ├── inventory
+            └── playbook.yml</content>
+            <content-title>SECRETS-REFERENCES</content-title>
+            <content>ansible-playbook(1)
+            ansible-vault(1)
+            Vault - Ansible Documentation:  https://docs.ansible.com/ansible/latest/user_guide/playbooks_vault.html
+            Variables and Vaults - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html#best-practices-for-variables-and-vaults</content>
+        </section>
+        <section>FACTS
+            <content-title>FACT-DUMP</content-title>
+            <content>vim facts.yml
+            ---
+            - name: Fact dump 
+              hosts: all
+              tasks:
+                -name: Print all facts 
+                  debug:
+                    var: ansible_facts 
+            ansible-playbook facts.yml</content>
+            <content-title>ANSIBLE-FACTS</content-title>
+            <content># FACTS ARE GATHERED AUTOMATICALLY EACH TIME PLAYBOOK IS RAN
+            ## ANSIBLE FACTS - EXAMPLES 
+            ansible_facts['hostname'] - Short host name 
+            ansible_facts['fqdn'] - Fully qualified domain name 
+            ansible_facts['default_ipv4']['address'] - Main IPv4 address (based on routing) 
+            ansible_facts['interfaces'] - List of the names of all network interfaces 
+            ansible_facts['devices']['vda']['partitions']['vda1']['size'] - Size of the /dev/vda1 disk partition 
+            ansible_facts['dns']['nameservers'] - List of DNS servers 
+            ansible_facts['kernel'] - Version of the currently running kernel
+            ## USE FACT IN PLAYBOOK 
+            {{ ansible_facts.default_ipv4.address }}
+            ## DISPLAY FACT AS VARIABLES
+            ansible {host.lab.net} -m setup  # displays ansible facts 
+            # TURN OFF FACT GATHERING IN PLAYBOOK 
+            - name : no auto fact gathering
+              hosts: myhosts
+              gather_facts: no
+              tasks:
+               - name: Manually gather facts 
+                 setup:</content>
+            <content-title>CUSTOM-HOST-FACTS</content-title>
+            <content># /etc/ansible/facts.d/*.facts - INI or JSON format
+            [packages]
+            web_package = httpd 
+            db_package = mariadb-server 
+
+            [users]
+            user1 = jon
+            user2 = john
+            # JSON FORMAT
+            {
+                "packages": {
+                    "web_package": "httpd",
+                    "db_package": "mariadb-server"
+                },
+                "users": {
+                    "user1": "jon",
+                    "user2": "john"
+                }
+            }</content>
+            <content-title>MAGIC-VARIABLES</content-title>
+            <content># hostvars, group_names, groups, inventory_hostname
+            ansible localhost -m debug -a 'var=hostvars["localhost"]'</content>
+            <content-title>FACT-REFERENCES</content-title>
+            <content>setup - Gathers facts about remote hosts - Ansible Documentation: https://docs.ansible.com/ansible/latest/modules/setup_module.html
+            Local Facts (Facts.d) - Variables - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#local-facts-facts-d</content>
+        </section>
+    </subject>
+
+
+    <subject>TASK-CONTROL
+        <section>LOOPS-TASKS
+            <content-title>LOOPS</content-title>
+            <content>## EXAMPLE LOOP YML - BUILTIN {{ ITEM }} LOOP VARIABLE
+            vars:
+              mail_services:
+                - postfix 
+                - dovecot 
+            tasks:
+              - name: Postfix and Dovecot are running 
+                service:
+                  name: "{{ item }}"
+                  state: started
+                loop: "{{ mail_services }}"
+            ## EXAMPLE LOOP YML - LISTS DICTS
+            - name: Users exist and are in the correct groups
+              user:
+                name: "{{ item.name }}"
+                state: present
+                groups: "{{ item.groups }}"
+              loop:
+                - name: jane
+                  groups: wheel
+                - name: joe 
+                  groups: root 
+            ## EXAMPLE OLDER STYLE LOOP USING WITH_ITEMS
+            vars:
+              data:
+                - user0 
+                - user1 
+                - user2
+            tasks:
+              - name: "with_items"
+              debug:
+                msg: "{{ item }}"
+              with_items: "{{ data }}"
+            ## USING REGISTER VARIABLES WITH LOOPS
+            ---
+            - name: Loop Register Test
+              gather_facts: no 
+              hosts: localhost
+              tasks:
+                - name: Looping Echo Task 
+                  shell: "echo This is my item: {{ item }}"
+                  loop:
+                    - one
+                    - two 
+                  register: echo_results 
+                - name: Show echo_results variable 
+                  debug:
+                    msg: "STDOUT from previous task: {{ item.stdout }}"
+                  loop: "{{ echo_results['results'] }}"</content>
+            <content-title>CONDITIONAL-TASK</content-title>
+            <content>## when statement
+            - name: Simple Boolean Task Demo 
+              hosts: all
+              vars:
+                run_my_task: true 
+              tasks:
+                - name: httpd package is installed 
+                  yum:
+                    name: httpd 
+                  when: run_my_task
+            ## EXAMPLE - CHECK FOR DEFINED VARIABLES 
+            - name: Test Variable is Defined Demo 
+              hosts: all
+              vars:
+                my_service: httpd 
+              tasks:
+                - name: "{{ my_service }} package is installed"
+                  yum:
+                    name: "{{ my_service }}"
+                  when: my_service is defined</content>
+            <content-title>TASK-CONTROL-REFERENCES</content-title>
+            <content>Migrating from with_X to loop https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html#migrating-from-with-x-toloop
+            Loops - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html
+            Tests - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_tests.html
+            Conditionals - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html
+            What Makes A Valid Variable Name - Variables - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#what-makes-a-valid-variable-name</content>
+        </section>
+        <section>HANDLERS
+            <content-title>ANSIBLE-HANDLERS</content-title>
+            <content>## EXAMPLE OF HANDLER TO RESTART SERVICE 
+            tasks:
+              - name: copy demo.conf config template 
+                template:
+                  src: /var/lib/templates/demo.conf 
+                  dest: /etc/httpd/conf.d/demo.conf 
+                notify:
+                  - restart apache 
+            handlers:
+              - name: restart apache 
+                service:
+                  name: httpd 
+                  state: restarted 
+            ## EXAMPLE MULTI HANDLERS 
+            tasks:
+              - name: copy demo.conf config template 
+                template:
+                  src: /var/lib/templates/demo.conf 
+                  dest: /etc/httpd/conf.d/demo.conf 
+                notify:
+                  - restart mysql 
+                  - restart apache 
+            handlers:
+              - name: restart mysql 
+                service:
+                  name: mariadb
+                  state: restarted 
+              - name: restart apache 
+                service:
+                  name: httpd
+                  state: restarted </content>
+            <content-title>HANDLERS-HYPERLINKS</content-title>
+            <content>Intro to Playbooks - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_intro.html</content>
+        </section>
+        <section>TASK-FAILURE
+            <content-title>HANDLING-FAILURES</content-title>
+            <content>## IGNORE ERROR - CONTINUE EXEC PLAYBOOK
+            - name: Latest version of notapkg is installed 
+              yum:
+                name: notapkg
+                state: latest
+              ignore_errors: yes
+            ## FORCE HANDLER EXECUTION UPON TASK FAILURE 
+            ---
+            - hosts: all
+              force_handlers: yes 
+              tasks:
+                - name: a task which always notifies its handler 
+                  command: /bin/true
+                  notify: restart the database 
+                - name: a task which fails because the package doesn't exist 
+                  yum:
+                    name: notapkg
+                    state: latest 
+              handlers:
+                - name: restart the database
+                  service:
+                    name: mariadb
+                    state: restarted 
+            ## TASK FAILURE CONDITION - failed_when 
+            tasks:
+              - name: Run user creation script 
+                shell: /usr/local/bin/create_users.sh 
+                register: command_result 
+                failed_when: "'Password missing' in command_result.stdout"
+            # Alternative way to do the the task failure condition 
+            tasks:
+              - name: run user creation script 
+                shell: /usr/local/bin/create_users.sh
+                register: command_result
+                ignore_errors: yes
+              - name: Report script failure 
+                fail:
+                  msg: "The password is missing in the output"
+                when: "'Password missing' in command_result.stdout"
+            ## TASK REPORT CHANGED RESULTS - changed_when
+            tasks:
+              - shell:
+                cmd: /usr/local/bin/upgrade-database 
+                register: command_result 
+                chenged_when: "'Success' in command_result.stdout"
+                notify:
+                  - restart_database 
+            handlers:
+              - name: restart_database 
+                service:
+                  name: mariadb 
+                  state: restarted 
+            ## BLOCKS WITH WHEN 
+            - name: block example 
+              hosts: all 
+              tasks:
+                - name: installing and configuring yum versionlock plugin
+                  block:
+                    - name: package needed by yum 
+                      yum:
+                        name: yum-plugin-versionlock 
+                        state: present 
+                    - name: lock version of tzdata 
+                      lineinfile:
+                        dest: /etc/yum/pluginconf.d/versionlock.list
+                        line: tzdata-2016j-1 
+                        state: present 
+                  when: ansible_distribution == "RedHat"
+            ## BLOCK / RESCUE / ALWAYS 
+            tasks:
+              - name: Upgrade DB 
+                block:
+                  - name: upgrade the database 
+                    shell:
+                      cmd: /usr/local/lib/upgrade-database 
+                rescue:
+                  - name: revert the database upgrade 
+                    shell:
+                      cmd: /usr/local/lib/revert-database 
+                always:
+                  - name: always restart the database 
+                    service:
+                      name: mariadb
+                      state: restarted 
+            </content>
+            <content-title>TASK-FAILURE-REFERENCES</content-title>
+            <content>Error Handling in Playbooks - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_error_handling.html
+            Error Handling - Blocks - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_blocks.html#errorhandling</content>
+        </section>
+    </subject>
+
+
+    <subject>DEPLOY-FILES
+        <section>MODIFY-COPY-FILES
+            <content-title>COMMON-MODULES</content-title>
+            <content># blockinfile - insert, update, remove block of multiline text
+            # copy - copy a file from src to dest - also set selinux contexts
+            # fetch - retrieve files from remote hosts to control node in file tree
+            # file - set file attributes - permissions, ownership, selinux contexts, time stamps
+            # lineinfile - check or modify a line in file using regex
+            # stat - retrieve file status information
+            # synchronize - rsync wrapper module 
+            # sefcontext - persistently change selinux contexts (semanage fcontext)</content>
+            <content-title>FILES-REFERENCES</content-title>
+            <content>ansible-doc(1)
+            chmod(1)
+            chown(1)
+            rsync(1)
+            stat(1)
+            touch(1)
+            Files modules: https://docs.ansible.com/ansible/latest/modules/list_of_files_modules.html</content>
+        </section>
+        <section>FILES-JINJA2
+            <content-title>SYNTAX</content-title>
+            <content># COMMENTS
+            {# This is a comment #}
+            # DISPLAY VALUE(S) FROM VARIABLE OR RESULTS
+            {{ ansible_facts['default_ipv4']['address'] }}
+            ## SSHD CONFIG JINJA2 EXAMPLE
+            Port {{ ssh_port }}
+            ListenAddress {{ ansible_facts['default_ipv4']['address'] }}
+            HostKey /etc/ssh/ssh_host_rsa_key
+            HostKey /etc/ssh/ssh_host_ecdsa_key
+            HostKey /etc/ssh/ssh_host_ed25519_key
+            SyslogFacility AUTHPRIV
+            PermitRootLogin {{ root_allowed }}
+            AllowGroups {{ groups_allowed }}
+            AuthorizedKeysFile /etc/.rht_authorized_keys .ssh/authorized_keys
+            PasswordAuthentication {{ passwords_allowed }}
+            ChallengeResponseAuthentication no
+            GSSAPIAuthentication yes
+            GSSAPICleanupCredentials no
+            UsePAM yes
+            X11Forwarding yes
+            UsePrivilegeSeparation sandbox
+            AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+            AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+            AcceptEnv LC_IDENTIFICATION LC_ALL LANGUAGE
+            AcceptEnv XMODIFIERS
+            Subsystem sftp /usr/libexec/openssh/sftp-server
+            # template module
+            tasks:
+              - name: template render
+                template:
+                  src: /tmp/j2-template.j2
+                  dest: /tmp/dest-config-file.txt 
+            ## JINJA2 LOOPS
+            {% for user in users %}
+                {{ user }}
+            {% endfor %}
+            # another loop example
+            {# for statement #}
+            {% for myuser in users if not myuser == "root" %}
+            User number {{ loop.index }} - {{ myuser }}
+            {% endfor %}
+            {% for myhost in groups['myhosts'] %}
+            {{ myhost }}
+            {% endfor %}
+            ## JINJA2 IF 
+            {% if finished %}
+            {{ result }}
+            {% endif %}
+            ## VARIABLE FILTERS
+            {{ output | to_json }}
+            {{ output | to_yaml }}
+            {{ output | to_nice_json }}
+            {{ output | to_nice_yaml }}
+            {{ output | from_json }}
+            {{ output | from_yaml }}</content>
+            <content-title>JINJA2-REFERENCES</content-title>
+            <content>template - Templates a file out to a remote server - Ansible Documentation: https://docs.ansible.com/ansible/latest/modules/template_module.html
+            Variables - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html
+            Filters - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html</content>
+        </section>
+    </subject>
+
+
+    <subject>LARGE-PROJECTS
+        <section>HOST-PATTERNS
+            <content-title>INVENTORY-HOSTS</content-title>
+            <content>## DIFFERENT METHOD OF APPLYING PATTERNS TO SELECT HOSTS
+            hosts: 192.168.1.1
+            hosts: somegroup
+            hosts: all
+            hosts: ungrouped
+            hosts: '*' 
+            hosts: '!test1.lab.net,somegroup'
+            hosts: '*.lab.net'
+            hosts: '192.168.0.*'
+            hosts: 'somegr*'
+            hosts: lab1.lab.net,lab2.lab.net,192.168.0.5
+            hosts: group1,group2
+            hosts: group2,&amp;group2  # hosts must be in both groups to match
+            hosts: all,!group3
+            ## TEST HOST PATTERNS W/ADHOC CMD
+            ansible host1.lab.net -i inventory1 --list-hosts
+            ansible 192.168.0.1 -i inventory1 --list-hosts
+            ansible all -i inventory1 --list-hosts
+            ansible '*.lab.net' -i inventory1 --list-hosts
+            ansible '*.lab.net,!host3.lab.net' -i inventory1 --list-hosts
+            ansible 'group1,&amp;group2' -i inventory1 --list-hosts</content>
+            <content-title>HOST-PATTERNS-REFERENCES</content-title>
+            <content>Working with Patterns - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html
+            Working with Inventory - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html</content>
+        </section>
+        <section>DYNAMIC-INVENTORIES
+            <content-title>LARGE-INVENTORIES</content-title>
+            <content># If an inventory file is executable, then it is treated as a dynamic inventory
+            # If the file is not executable, then it is treated as a static inventory
+            ansible-inventory -i inventory --list  # INI to JSON
+            # Ansible ignores files in an inventory directory if they end with certain suffixes. This can be controlled with the inventory_ignore_extensions directive in the Ansible configuration file.</content>
+            <content-title>DYN-INVENTORIES-REFERENCES</content-title>
+            <content>Working With Dynamic Inventory: Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/intro_dynamic_inventory.html
+            Developing Dynamic Inventory: Ansible Documentation: https://docs.ansible.com/ansible/latest/dev_guide/developing_inventory.html
+            GitHub site at https://github.com/ansible/ansible/tree/devel/contrib/inventory</content>
+        </section>
+        <section>PARALLELISM
+            <content-title>FORKS</content-title>
+            <content># Max amount of simultaneous connections is FORKS
+            # fork is defined in ansible conf file 
+            ansible-config dump | grep -i forks 
+            ansible-config list | grep -i forks
+            ansible -f {number of forks to use} ...
+            ansible-playbook -f {number of forks to use} ...
+            time ansible-playbook playbook.yml  # outputs run times</content>
+            <content-title>SERIAL</content-title>
+            <content># serial parameter runs hosts through batches so that not all of them are ran through tasks at the same time
+            # serial is defined in the yml play
+            serial: 2  # Will execute entire play and handlers for 2 hosts at time until all hosts are complete
+            serial: 50%  # Will execute 50% of hosts, always 1 or greater</content>
+            <content-title>PARALLELISM-REFERENCES</content-title>
+            <content>Rolling Update Batch Size - Delegation, Rolling Updates, and Local Actions - Ansible Documentation: http://docs.ansible.com/ansible/playbooks_delegation.html#rolling-update-batchsize
+            Ansible Performance Tuning (For Fun and Profit): https://www.ansible.com/blog/ansible-performance-tuning</content>
+        </section>
+        <section>INCLUDE-IMPORT-FILES
+            <content-title>IMPORTING-PLAYBOOKS</content-title>
+            <content></content>
+            <content-title>INCLUDE-REFERENCES</content-title>
+            <content>Including and Importing - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_includes.html
+            Creating Reusable Playbooks - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse.html
+            Conditionals - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html</content>
+        </section>
+    </subject>
+
+
+    <subject>PLAYBOOK-ROLES
+        <section>ROLE-STRUCTURE
+            <content-title>STANDARD-STRUCTURE</content-title>
+            <content>tree user.example 
+            ├── defaults
+            │ └── main.yml  # default values of role variables (can be changed)
+            ├── files       # static files
+            ├── handlers    
+            │ └── main.yml  # role's handler definitions
+            ├── meta
+            │ └── main.yml  # role info and role dependencies (author,license,platform,...)
+            ├── README.md   
+            ├── tasks
+            │ └── main.yml  # role's task definitions
+            ├── templates   # JINJA2 templates
+            ├── tests
+            │ ├── inventory # inventory
+            │ └── test.yml  # playbook to test role
+            └── vars
+              └── main.yml  # static values of role variables (shouldn't change)</content>
+            <content-title>PRE-POST-TASKS</content-title>
+            <content># EXAMPLE PRE-TASK POST-TASK
+            - name: Play to illustrate order of execution
+              hosts: remote.example.com
+              pre_tasks:
+                - name: Pre-task
+                  debug:
+                    msg: 'pre-task'
+                  notify: my handler
+              roles:
+                - role1
+              tasks:
+                - name: First Task
+                  debug:
+                    msg: 'first task'
+                  notify: my handler
+              post_tasks:
+                - name Post-task
+                  debug:
+                    msg: 'post-task'
+                  notify: my handler
+              handlers:
+                - name: my handler
+                  debug:
+                    msg: Running my handler
+            # EXAMPLE INCLUDE_ROLE IN TASK
+            - name: Execute a role as a task
+              hosts: remote.example.com
+              tasks:
+                - name: A normal task
+                  debug:
+                    msg: 'first task'
+                - name: A task to include role2 here
+                  include_role: role2</content>
+            <content-title>ROLE-STRUCT-REFERENCES</content-title>
+            <content>Roles - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html</content>
+        </section>
+        <section>SYSTEM-ROLES
+            <content-title>RHEL-ROLES</content-title>
+            <content>## rhel-system-roles package AppStream channel
+            rhel-system-roles.kdump     # config kdump crash recovery service 
+            rhel-system-roles.network   # config network interfaces
+            rhel-system-roles.selinux   # config SELinux mode,context,booleans,users
+            rhel-system-roles.timesync  # config time sync, ntp, ptp
+            rhel-system-roles.postfix   # config host as mail transfer agent
+            rhel-system-roles.firewall  # config host firewall
+            rhel-system-roles.tuned     # config tune system performance
+            ## INSTALL RHEL SYS ROLES
+            yum install rhel-system-roles
+            ls -l /usr/share/ansible/roles/
+            # roles_path  - ansible config path to roles
+            # ANSIBLE_ROLES_PATH - environ var to point to path to roles
+            ## ROLES DOCUMENTATION - README.md in role dir
+            ls -l /usr/share/doc/rhel-system-roles
+            # https://galaxy.ansible.com</content>
+            <content-title>TIME-SYNC-ROLE</content-title>
+            <content># system role - rhel-system-roles.timesync 
+            vim /usr/share/doc/rhel-system-roles/timesync/README.md
+            ## TIMESYNC PLAY EXAMPLE
+            - name: Time Synchronization Play
+              hosts: servers
+              vars:
+                timesync_ntp_servers:
+                  - hostname: 0.rhel.pool.ntp.org
+                    iburst: yes
+                  - hostname: 1.rhel.pool.ntp.org
+                    iburst: yes
+                  - hostname: 2.rhel.pool.ntp.org
+                    iburst: yes
+                timezone: UTC
+                roles:
+                  - rhel-system-roles.timesync
+              tasks:
+                - name: Set timezone
+                  timezone:
+                    name: "{{ timezone }}"
+            ## TIMESYNC EXAMPLE WITH DIR STRUCTURE 
+            tree
+            .
+            ├── ansible.cfg
+            ├── group_vars
+            │   └── servers
+            │       └── timesync.yml
+            ├── inventory
+            └── timesync_playbook.yml
+            # timesync.yml
+            timesync_ntp_servers:
+              - hostname: 0.rhel.pool.ntp.org
+                iburst: yes
+              - hostname: 1.rhel.pool.ntp.org
+                iburst: yes
+              - hostname: 2.rhel.pool.ntp.org
+                iburst: yes
+            timezone: UTC
+            # time_sync_playbook.yml 
+            - name: Time Synchronization Play
+              hosts: servers
+              roles:
+                - rhel-system-roles.timesync
+              tasks:
+                - name: Set timezone
+                  timezone:
+                    name: "{{ timezone }}"</content>
+             <content-title>SELINUX-ROLE</content-title>
+            <content># EXAMPLE using rhel-system-roles.selinux 
+            - name: Apply SELinux role
+              block:
+                - include_role:
+                  name: rhel-system-roles.selinux
+              rescue:
+                - name: Check for failure for other reasons than required reboot
+                  fail:
+                  when: not selinux_reboot_required
+              
+                - name: Restart managed host
+                  reboot:
+              
+                - name: Reapply SELinux role to complete changes
+                  include_role:
+                    name: rhel-system-roles.selinux</content>
+            <content-title>SYS-ROLES-REFERENCES</content-title>
+            <content>Red Hat Enterprise Linux (RHEL) System Roles: https://access.redhat.com/articles/3050101
+            Linux System Roles: https://linux-system-roles.github.io/</content>
+        </section>
+        <section>CREATING-ROLES
+            <content-title>CREATE-ROLE-DIR-STRUCTURE</content-title>
+            <content>ansible-galaxy list  # list roles
+            ansible-galaxy init {my_new_role}  # creates dir structure inside playbook project
+            </content>
+            <content-title>CREATE-ROLES-REFERENCES</content-title>
+            <content>Using Roles - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html#using-roles
+            Using Variables - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html</content>
+        </section>
+        <section>ANSIBLE-GALAXY
+            <content-title>GALAXY-CMDS</content-title>
+            <content>ansible-galaxy search 'redis' --platforms EL
+            ansible-galaxy info geerlingguy.redis
+            ansible-galaxy install geerlingguy.redis -p roles/
+            # install roles using requirements file
+            vim roles/requirements.yml
+            - src: geerlingguy.redis 
+              version: "1.5.0"
+            ansible-galaxy install -r roles/requirements.yml -p roles
+            cat roles/requirements.yml
+            # from Ansible Galaxy, using the latest version
+            - src: geerlingguy.redis
+
+            # from Ansible Galaxy, overriding the name and using a specific version
+            - src: geerlingguy.redis
+            version: "1.5.0"
+            name: redis_prod
+            
+            # from any Git-based repository, using HTTPS
+            - src: https://gitlab.com/guardianproject-ops/ansible-nginx-acme.git
+            scm: git
+            version: 56e00a54
+            name: nginx-acme
+            
+            # from any Git-based repository, using SSH
+            - src: git@gitlab.com:guardianproject-ops/ansible-nginx-acme.git
+            scm: git
+            version: master
+            name: nginx-acme-ssh
+            
+            # from a role tar ball, given a URL;
+            # supports 'http', 'https', or 'file' protocols
+            - src: file:///opt/local/roles/myrole.tar
+            name: myrole
+            ## MANAGING ROLES
+            ansible-galaxy list
+            ansible-galaxy remove nginx-acme-ssh</content>
+            <content-title>GALAXY-REFERENCES</content-title>
+            <content>Ansible Galaxy - Ansible Documentation: https://docs.ansible.com/ansible/latest/reference_appendices/galaxy.html</content>
+        </section>
+    </subject>
+
+
+    <subject>TSHOOT-ANSIBLE
+        <section>TSHOOT
+            <content-title>TSHOOT-PLAYBOOKS</content-title>
+            <content>ansible-playbook play.yml --syntax-check
+            ansible-playbook play.yml --step
+            ansible-playbook play.yml --start-at-task="start httpd service"
+            ansible-playbook --check playbook.yml
+            # add 'check_mode: yes' to set task to always run check mode 
+            # add 'check_mode: no' to set task to never run check mode
+            ansible-playbook --check --diff playbook.yml</content>
+            <content-title>TSHOOT-REFERENCES</content-title>
+            <content>Configuring Ansible - Ansible Documentation: https://docs.ansible.com/ansible/latest/installation_guide/intro_configuration.html
+            debug - Print statements during execution - Ansible Documentation: https://docs.ansible.com/ansible/latest/modules/debug_module.html
+            Best Practices - Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html
+            Check Mode ("Dry Run") -- Ansible Documentation: https://docs.ansible.com/ansible/latest/user_guide/playbooks_checkmode.html
+            Testing Strategies -- Ansible Documentation: https://docs.ansible.com/ansible/latest/reference_appendices/test_strategies.html</content>
+        </section>
+    </subject>
+
+
+    <subject>AUTO-ADMIN-TASKS
+        <section>SUBSCRIPTIONS
+            <content-title>SUBSCRIPTION-CMDS</content-title>
+            <content></content>
+            <content-title>SUBSCRIPTIONS-REFERENCES</content-title>
+            <content></content>
+        </section>
+        <section>USERS-AUTHENTICATION
+            <content-title>USER-GROUP-MODULES</content-title>
+            <content>## EXAMPLE ADD USERS
+            - name: Add new user to the development machine and assign the appropriate groups.
+              user:
+                name: devops_user
+                shell: /bin/bash
+                groups: sys_admins, developers
+                append: yes
+            ## EXAMPLE GEN SSH KEY
+            - name: Create a SSH key for user1
+                user:
+                    name: user1
+                    generate_ssh_key: yes
+                    ssh_key_bits: 2048
+                    ssh_key_file: .ssh/id_my_rs
+            # COMMON USER PARAMETERS
+            comment  # account description
+            group    # primary account group
+            groups   # alternate account groups
+            home     # home dir
+            create_home  # true|false 
+            system   # creates system account 
+            uid      # sets UID 
+            ## EXAMPLE GROUP MODULE
+            - name: Verify that auditors group exists
+              group:
+                name: auditors
+                state: present
+            # COMMON GROUP PARAMETERS 
+            gid    # SET GROUP ID
+            local  # forces use of local command alternatives 
+            name   # group name 
+            state  # preset or not 
+            system # Set as system group</content>
+            <content-title>AUTH-MODULES</content-title>
+            <content>## SSH KNOWN HOSTS
+            - name: copy host keys to remote servers
+              known_hosts:
+                path: /etc/ssh/ssh_known_hosts
+                name: user1
+                key: "{{ lookup('file', 'pubkeys/user1') }}"
+            # lookup plugin allows ansible to access outside data sources
+            - name: Set authorized key
+              authorized_key:
+                user: user1
+                state: present
+                key: "{{ lookup('file', '/home/user1/.ssh/id_rsa.pub') }}</content>
+            <content-title>USERS-AUTH-REFERENCES</content-title>
+            <content>Users Module Ansible Documentation: http://docs.ansible.com/ansible/latest/modules/user_module.html#user-module
+            How do I generate crypted passwords for the user module:https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#how-do-igenerate-crypted-passwords-for-the-user-module
+            Group Module Ansible Documentation: https://docs.ansible.com/ansible/latest/modules/group_module.html#groupmodule
+            SSH Known Hosts Module Ansible Documentation: https://docs.ansible.com/ansible/latest/modules/known_hosts_module.html#known-hosts-module
+            Authorized_key module Ansible Documentation: https://docs.ansible.com/ansible/latest/modules/authorized_key_module.html#authorized-key-module
+            The Lookup Plugin Ansible Documentation: https://docs.ansible.com/ansible/latest/plugins/lookup.html?highlight=lookup</content>
+        </section>
+        <section>BOOT-SCHEDULE-PROCESSES
+            <content-title>AT-CRON-MODULES</content-title>
+            <content># EXAMPLE AT MODULE
+            - name: remove tempuser.
+              at:
+                command: userdel -r tempuser
+                count: 20
+                units: minutes
+                unique: yes
+            # COMMON AT PARAMETERS
+            command   # command scheduled to run
+            count     # num of units
+            script_file  # existing script file to be executed by at
+            state     # absent|present
+            unique    # true|false
+            units     # minutes|hours|days|weeks
+            # EXAMPLE CRON MODULE 
+            - cron:
+              name: "Flush Bolt"
+              user: "root"
+              minute: 45
+              hour: 11
+              job: "php ./app/nut cache:clear"
+            # COMMON CRON PARAMETERS 
+            special_time  # set of reoccurring times 
+            state         # absent|present 
+            crond_file    # crontab file 
+            backup        # yes|no   backup crontab file before editing</content>
+            <content-title>SHELL-CMD-MODULES</content-title>
+            <content># EXAMPLE SHELL MODULE 
+            - name: Run a templated variable (always use quote filter to avoid cmd injection)
+              shell: cat {{ myfile|quote }}
+            # EXAMPLE CMD MODULE - COMMAND MOD IS MORE SECURE THAN SHELL
+            - name: This command only 
+              command: /usr/bin/scrape_logs.py arg1 arg2
+                args:
+                  chdir: scripts/
+                  creates: /path/to/script
+            # EXAMPLE DISPLAY ENVIRON VARS 
+            ---
+            - name:
+              hosts: webservers
+              vars:
+                local_shell: "{{ ansible_env }}"
+              tasks:
+                - name: Printing all the environment variables in Ansible
+                  debug:
+                    msg: "{{ local_shell }}"
+            # msg: "{{ lookup('env','USER','HOME','SHELL') }}" isolate specific environ vars</content>
+            <content-title>BOOT-SCHED-PROCESS-REFERENCES</content-title>
+            <content>at - Schedule the execution of a command or script file via the at command - Ansible Documentation: https://docs.ansible.com/ansible/latest/modules/at_module.html
+            cron - Manage cron.d and crontab entries - Ansible Documentation: https://docs.ansible.com/ansible/latest/modules/cron_module.html
+            reboot - Reboot a machine - Ansible Documentation: https://docs.ansible.com/ansible/latest/modules/reboot_module.html
+            service - Run services on a machine - Ansible Documentation: https://docs.ansible.com/ansible/latest/modules/service_module.html</content>
+        </section>
+        <section>STORAGE
+            <content-title>STORAGE-MODULES</content-title>
+            <content>## PARTED MODULE
+            - name: New 10GB partition
+              parted:
+                device: /dev/vdb
+                number: 1
+                state: present
+                part_end: 10GB
+            # COMMON PARTED PARAMETERS
+            align      # configures partition alignment
+            device     # block device
+            flags      # partition flags
+            number     # partition number
+            part_end   # partition size
+            state      # creates or removes partition
+            unit       # size unit for partition information
+            ## LVG MODULE 
+            - name Creates a volume group
+              lvg:
+                vg: vg1 
+                pvs: /dev/vda1 
+                pesize: 32
+            - name: resize a volume group 
+              lvg:
+                vg: vg1 
+                pvs: /dev/vdb1,/dev/vdc1 
+            # COMMON LVG PARAMETERS 
+            pesize   # Size of physical extent - must be power of 2
+            pvs      # List of comma-separated devices to be config as physical volumes for group
+            vg       # name of volume group 
+            state    # creates or removes volume
+            ## LVO MODULE  
+            - name: Create a logical volume of 2GB
+              lvol:
+                vg: vg1
+                lv: lv1
+                size: 2g
+            # COMMON LVO PARAMETERS 
+            lv        # name of logical volume
+            resizefs  # resizes the filesystem with the logical volume
+            shrink    # enable logical volume shrink
+            size      # size of the logical volume
+            snapshot  # name of the snapshot for logical volume 
+            state     # create or removes logical volume 
+            vg        # parent volume group for the logical volume 
+            ## FILESYSTEM MODULE 
+            - name: create an XFS filesystem 
+              filesystem:
+                fstype: xfs 
+                dev: /dev/vdb1 
+            # COMMON FILESYSTEM PARAMETERS 
+            dev      # block device name 
+            fstype   # filesystem type 
+            resizefs # grows the filesystem size to the size of the block device 
+            ## MOUNT MODULE 
+            - name: Mount device with ID
+              mount:
+                path: /data
+                src: UUID=a8063676-44dd-409a-b584-68be2c9f5570
+                fstype: xfs
+                state: present
+            - name: Mount NFS share
+              mount: name=/nfsshare src=172.25.250.100:/share fstype=nfs opts=defaults,nobootwait dump=0 passno=2 state=mounted
+            ## CONFIGURE SWAP 
+            - name: Create new swap VG
+              lvg: vg=vgswap pvs=/dev/vda1 state=present
+            - name: Create new swap LV
+              lvol: vg=vgswap lv=lvswap size=10g
+            - name: Format swap LV
+              command: mkswap /dev/vgswap/lvswap
+              when: ansible_swaptotal_mb &lt; 128
+            - name: Activate swap LV
+              command: swapon /dev/vgswap/lvswap
+              when: ansible_swaptotal_mb &lt; 128
+            ## ANSIBLE STORAGE FACTS 
+            ansible webservers -m setup -a 'filter=ansible_devices'
+            ansible webservers -m setup -a 'filter=ansible_device_links'
+            ansible webservers -m setup -a 'filter=ansible_mounts'</content>
+            <content-title>STORAGE-REFERENCES</content-title>
+            <content>parted - Configure block device partitions - Ansible Documentation: https://docs.ansible.com/ansible/latest/modules/parted_module.html
+            lvg - Configure LVM volume groups - Ansible Documentation: https://docs.ansible.com/ansible/latest/modules/lvg_module.html
+            lvol - Configure LVM logical volumes - Ansible Documentation: https://docs.ansible.com/ansible/latest/modules/lvol_module.html
+            filesystem - Makes a filesystem - Ansible Documentation: https://docs.ansible.com/ansible/latest/modules/filesystem_module.html
+            mount - Control active and configured mount points - Ansible Documentation: https://docs.ansible.com/ansible/latest/modules/mount_module.html</content>
+        </section>
+        <section>NETWORK-CONFIG
+            <content-title>NETWORK-MODULES</content-title>
+            <content>## RHEL NETWORK ROLE
+            - name: NIC Configuration
+              hosts: webservers
+              vars:
+                network_connections:
+                  - name: ens4
+                    type: ethernet
+                    ip:
+                      address:
+                        - 172.25.250.30/24
+              roles:
+                - rhel-system-roles.network
+            ## NMCLI MODULE 
+            - name: NIC configuration
+              nmcli:
+                conn_name: ens4-conn
+                ifname: ens4
+                type: ethernet
+                ip4: 172.25.250.30/24
+                gw4: 172.25.250.1
+                state: present
+            ## HOSTNAME MODULE 
+            - name: Change hostname
+              hostname:
+                name: managedhost1
+            ## ANSIBLE NETWORK FACTS 
+            ansible webservers -m setup -a 'gather_subset=network filter=ansible_interfaces'
+            ansible webservers -m setup -a 'gather_subset=network filter=ansible_ens4'</content>
+            <content-title>NETWORK-CONF-REFERENCES</content-title>
+            <content>Knowledgebase: Red Hat Enterprise Linux (RHEL) System Roles: https://access.redhat.com/articles/3050101
+            Linux System Roles: https://linux-system-roles.github.io/
+            nmcli Module Documentation: https://docs.ansible.com/ansible/latest/modules/nmcli_module.html/
+            hostname Module Documentation: https://docs.ansible.com/ansible/latest/modules/hostname_module.html/
+            firewalld Module Documentation: https://docs.ansible.com/ansible/latest/modules/firewalld_module.html/</content>
+        </section>
+    </subject>
+
+
+<!--
+    <subject>
+        <section>
+            <content-title>COMMANDS</content-title>
+            <content></content>
+            <content-title>INFO-MAN PAGES</content-title>
+            <content></content>
+            <content-title>FILE LOCATIONS</content-title>
+            <content></content>
+            <content-title>HYPERLINKS</content-title>
+            <content></content>
+        </section>
+    </subject>
+-->
+
+</root>
