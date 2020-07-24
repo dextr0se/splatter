@@ -142,10 +142,11 @@ html_document += '''
 '''
 
 try:
-    htmlFile = open("splatter.html", "w")
+    htmlFile = open("splatter.html", "w", encoding="utf-8")
     htmlFile.write(html_document)
     htmlFile.close()
     print('(+) HTML FILE GENERATED')
 except Exception as e:
-    print('(-) FILE ERROR: ' + e)
+    print('(-) FILE READ-WRITE ERROR: ')
+    print(e)
 
